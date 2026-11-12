@@ -1,0 +1,3051 @@
+[
+  {
+    "id": "hot-commands",
+    "title": "⭐ Самые важные команды",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "su -",
+        "desc": "Переключиться на root (если sudo недоступен)",
+        "hint": "exit = вернуться к пользователю",
+        "tip": "sudo может быть настроен установщиком Debian для первого пользователя. Если root-пароль задан и sudo не установлен, su - переключит на root (потребуется пароль root); exit вернёт к пользователю.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo -i",
+        "desc": "Открыть полноценную root login-shell",
+        "hint": "Для разовой операции лучше sudo команда; выход — exit",
+        "tip": "sudo -i запускает login-shell root: меняет HOME на /root и загружает окружение root. Удобно для серии административных действий, но увеличивает риск случайной команды от root. Для одной операции предпочитай sudo команда; exit завершит root-shell.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo apt update",
+        "desc": "Обновить список пакетов",
+        "hint": "⚠️ Всегда делай перед upgrade или install",
+        "tip": "Обновляет список доступных пакетов из репозиториев. НЕ обновляет сами пакеты. Запускай первой перед upgrade.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo apt upgrade",
+        "desc": "Обычное обновление пакетов",
+        "hint": "Не удаляет пакеты, но может добавить зависимости",
+        "tip": "Обновляет установленные пакеты. Может установить новые зависимости, но не удаляет уже установленные пакеты; удерживаемые изменения оставит. Перед запуском проверь список действий.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo apt full-upgrade",
+        "desc": "Полное обновление системы",
+        "hint": "Может удалить пакеты при конфликтах",
+        "tip": "full-upgrade может удалять пакеты и устанавливать новые для разрешения конфликтов зависимостей. Используй для мажорных обновлений системы.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo apt install -y пакет",
+        "desc": "Установить пакет (авто-yes)",
+        "hint": "-y = без подтверждения",
+        "tip": "install -y автоматически отвечает yes на все вопросы. Удобно в скриптах. Можно указывать несколько пакетов: apt install nginx git curl -y",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo apt purge пакет",
+        "desc": "Удалить пакет + конфиги",
+        "hint": "Чистит всё подчистую",
+        "tip": "purge удаляет пакет + ВСЕ его конфигурационные файлы. remove оставляет конфиги. Используй purge для полной очистки.",
+        "risk": "danger"
+      },
+      {
+        "cmd": "sudo apt autoremove --purge",
+        "desc": "Удалить ненужные зависимости",
+        "hint": "--purge также чистит конфиги",
+        "tip": "autoremove удаляет пакеты, которые были установлены как зависимости, но больше не нужны. Освобождает место.",
+        "risk": "danger"
+      },
+      {
+        "cmd": "ls -la",
+        "desc": "Всё содержимое папки (включая скрытые)",
+        "hint": "-l = подробно, -a = скрытые",
+        "tip": "ls -la: -l = подробный формат (права, владелец, размер, дата), -a = показать скрытые файлы (начинающиеся с точки)",
+        "risk": "safe"
+      },
+      {
+        "cmd": "df -h",
+        "desc": "Место на дисках (читабельно)",
+        "hint": "-h = human readable (GB, MB)",
+        "tip": "df -h показывает использование дисков в человеко-читаемом формате (GB, MB). -i покажет использование inodes.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "free -h",
+        "desc": "Использование ОЗУ",
+        "hint": "Смотри колонку available , а не free",
+        "tip": "free -h: total — всего памяти, used — используется, free — свободно, available — доступно для новых приложений (важнее чем free!).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "uptime",
+        "desc": "Время работы + Load Average",
+        "hint": "Load > ядер = система перегружена",
+        "tip": "uptime показывает: текущее время, время работы системы, кол-во пользователей, load average за 1, 5, 15 мин. Load > кол-ва ядер = перегрузка.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "history | tail -50",
+        "desc": "История команд",
+        "hint": "Ctrl+R = быстрый поиск в истории",
+        "tip": "history | tail -50 показывает последние 50 команд. history | grep 'ssh' — найти команду в истории. Ctrl+R — интерактивный поиск.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "journalctl -f",
+        "desc": "Следить за системным журналом",
+        "hint": "Ctrl+C = выход; -u сервис = логи одного сервиса",
+        "tip": "journalctl -f показывает новые записи systemd-journald в реальном времени. В минимальной Debian-системе /var/log/syslog может отсутствовать, если rsyslog не установлен.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "package-management",
+    "title": "📦 Управление пакетами",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "apt search слово",
+        "desc": "Поиск пакета в репозитории",
+        "hint": "Ищет по имени и описанию",
+        "tip": "Ищет пакет в кэше по названию и описанию. apt search nginx ищет всё с nginx в названии. Можно использовать регулярные выражения.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "apt show пакет",
+        "desc": "Детали пакета",
+        "hint": "Версия, зависимости, описание",
+        "tip": "Показывает детальную информацию: версия, зависимости, описание, maintainer, размер. Полезно перед установкой.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "apt list --installed",
+        "desc": "Все установленные пакеты",
+        "hint": "Пайп с grep для поиска",
+        "tip": "apt list --installed | grep nginx — найти конкретный установленный пакет. Без grep — весь список.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "dpkg -l | grep пакет",
+        "desc": "Поиск через dpkg (низкий уровень)",
+        "hint": "dpkg — базовый менеджер .deb",
+        "tip": "dpkg -l показывает ВСЕ пакеты (включая удалённые с остатками). dpkg -L пакет — показать файлы пакета. dpkg -s пакет — статус пакета.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "apt-cache depends пакет",
+        "desc": "Показать зависимости пакета",
+        "hint": "rdepends — обратные зависимости",
+        "tip": "apt-cache depends пакет — показать зависимости. apt-cache rdepends пакет — кто зависит от этого пакета.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo apt clean",
+        "desc": "Очистить кэш скачанных пакетов",
+        "hint": "Освобождает место в /var/cache",
+        "tip": "apt clean — удалить ВСЕ скачанные .deb из кэша. autoclean — удалить только старые версии. Кэш в /var/cache/apt/archives/.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo apt-get install пакет",
+        "desc": "Установка (классический apt-get)",
+        "hint": "apt — новый, apt-get — для скриптов",
+        "tip": "apt-get update && apt-get install пакет — классический вариант. apt install — более новая обёртка с прогресс-баром и цветами.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo dpkg -i файл.deb",
+        "desc": "Установить локальный .deb",
+        "hint": "apt --fix-broken install = фикс зависимостей",
+        "tip": "dpkg -i файл.deb — установить локальный .deb файл. Если ошибки зависимостей: apt --fix-broken install.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo apt modernize-sources",
+        "desc": "Перевести источники APT в deb822",
+        "hint": "Проверьте diff и ключи поставщика перед обновлением",
+        "tip": "В Debian не используйте Ubuntu PPA: они могут нарушить зависимости. Репозиторий стороннего поставщика добавляйте только по его инструкции, с отдельным keyring и форматом deb822 в /etc/apt/sources.list.d/.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo apt install пакет --dry-run",
+        "desc": "Симуляция установки (без действий)",
+        "hint": "Проверка перед реальным запуском",
+        "tip": "Показывает какие пакеты будут установлены/обновлены/удалены БЕЗ выполнения. Полезно для проверки перед реальным запуском.",
+        "risk": "caution"
+      }
+    ]
+  },
+  {
+    "id": "files-and-dirs",
+    "title": "📁 Файлы и директории",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "cp -av /source /dest",
+        "desc": "Копировать с сохранением прав",
+        "hint": "-a = preserve all, -v = verbose",
+        "tip": "cp -r — рекурсивное копирование папок. cp -a — сохранить все атрибуты (права, владельцы, время). cp -v — показывать процесс.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "mv -i файл /путь/",
+        "desc": "Переместить / переименовать",
+        "hint": "-i = спросить перед перезаписью",
+        "tip": "mv работает и для перемещения, и для переименования. Если dest — папка, файл перемещается в неё. mv -i — спросить перед перезаписью.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "rm -rf папка",
+        "desc": "Удалить рекурсивно",
+        "hint": "НЕТ корзины! Восстановить почти невозможно!",
+        "tip": "rm -rf — БЕЗОПАСНОСТИ НЕТ! Удаляет всё без подтверждения. rm -ri — спрашивать. rm -rf / — НИКОГДА НЕ ЗАПУСКАЙ!",
+        "risk": "danger"
+      },
+      {
+        "cmd": "less файл",
+        "desc": "Просмотр файла с навигацией",
+        "hint": "/текст = поиск, q = выход, G = конец",
+        "tip": "less позволяет скроллить, искать (/текст), выходить (q). cat выводит всё сразу. head -20 — первые 20 строк. tail -20 — последние 20.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "grep -rn \"текст\" /путь",
+        "desc": "Поиск текста в файлах рекурсивно",
+        "hint": "-r = рекурсивно, -n = номера строк, -i = без учёта регистра",
+        "tip": "-i = регистронезависимый. -r = рекурсивно по папкам. -n = номера строк. -v = инвертировать (НЕ содержит). grep -rn 'error' /var/log/",
+        "risk": "safe"
+      },
+      {
+        "cmd": "find /путь -type f -name \"*.conf\"",
+        "desc": "Поиск файлов по имени/типу/размеру",
+        "hint": "-mtime -7 = за 7 дней, -size +100M = большие",
+        "tip": "find / -type f -name '*.conf' — искать файлы. -type d — директории. -mtime -7 — изменены за 7 дней. -size +100M — больше 100MB. -exec rm {} \\; — выполнить команду.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "mkdir -p /путь/к/папке",
+        "desc": "Создать папку (включая родителей)",
+        "hint": "-p = создать промежуточные папки",
+        "tip": "mkdir -p создаёт родительские директории если их нет. mkdir -p /a/b/c — создаст всю цепочку.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "ln -s /реальный /ссылка",
+        "desc": "Символическая ссылка (symlink)",
+        "hint": "Как ярлык в Windows",
+        "tip": "ln -s /реальный/файл /ссылка — создать символическую ссылку (как ярлык). Если удалить оригинал — ссылка сломается.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "chmod 755 /файл",
+        "desc": "Права доступа (числовой формат)",
+        "hint": "7=чтение+запись+выполнение, 5=чтение+выполнение",
+        "tip": "chmod: r=4, w=2, x=1. 755 = rwxr-xr-x (владелец всё, остальные чтение+выполнение). 644 = rw-r--r--. 600 = только владелец.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo chown -R user:group /папка",
+        "desc": "Сменить владельца и группу",
+        "hint": "-R = рекурсивно, www-data для веб",
+        "tip": "chown пользователь:группа файл. -R = рекурсивно. chown -R www-data:www-data /var/www — типично для веб-серверов.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "du -sh /путь",
+        "desc": "Размер папки/файла",
+        "hint": "du -sh * = размеры всех папок",
+        "tip": "du -sh * — размер каждой папки в текущей. du -ah --max-depth=2 / | sort -rh | head -20 — 20 самых больших папок.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "tar -czvf архив.tar.gz /папка",
+        "desc": "Создать tar.gz архив",
+        "hint": "-c=создать, -z=gzip, -v=показать, -f=файл",
+        "tip": "tar -czvf archive.tar.gz /путь — создать. tar -xzvf archive.tar.gz — извлечь. -z = gzip, -j = bzip2, -J = xz.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "processes-monitoring",
+    "title": "⚙️ Процессы и мониторинг",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "ps aux | grep имя",
+        "desc": "Поиск процесса",
+        "hint": "STAT: R=run, S=sleep, Z=zombie, D=disk wait",
+        "tip": "ps aux: USER, PID, %CPU, %MEM, VSZ, RSS, TTY, STAT, START, TIME, COMMAND. STAT: R=running, S=sleeping, Z=zombie, D=uninterruptible.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "kill -15 PID",
+        "desc": "Остановить процесс (мягко)",
+        "hint": "-15 = TERM (мягко), -9 = KILL (жёстко)",
+        "tip": "kill -15 (SIGTERM) — мягкая остановка. kill -9 (SIGKILL) — принудительная. kill -1 (SIGHUP) — перезагрузка конфига. Всегда пробуй -15 сначала!",
+        "risk": "caution"
+      },
+      {
+        "cmd": "killall имя_процесса",
+        "desc": "Убить все процессы по имени",
+        "hint": "Опасно! Убьёт ВСЕ с таким именем",
+        "tip": "killall отправляет сигнал ВСЕМ процессам с именем. killall -9 nginx — убить все процессы nginx. pkill — по шаблону.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "htop",
+        "desc": "Интерактивный мониторинг",
+        "hint": "F5=дерево, F6=сортировка, F9=kill",
+        "tip": "htop — интерактивный монитор. F1 = помощь, F5 = дерево, F6 = сортировка, F9 = kill, q = выход. Цвета: CPU, RAM, Swap.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "top",
+        "desc": "Мониторинг (встроенный)",
+        "hint": "P=по CPU, M=по RAM, q=выход",
+        "tip": "top — встроенный монитор. P = сортировка по CPU, M = по памяти. q = выход. Менее удобный чем htop, но всегда доступен.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "nohup команда >nohup.out 2>&1 &",
+        "desc": "Запустить в фоне без терминала",
+        "hint": "Для долгих сервисов используй systemd",
+        "tip": "nohup не даст процессу завершиться при закрытии терминала. Перенаправления должны стоять до &: nohup команда >nohup.out 2>&1 &. Для сервисов предпочтительнее systemd, для сессий — tmux.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "tmux new -s имя",
+        "desc": "Терминальный мультиплексор",
+        "hint": "Ctrl+B, D = отключиться, процесс жив!",
+        "tip": "tmux new -s имя — создать сессию. Ctrl+B, D — отключиться (процесс работает). tmux attach -t имя — вернуться. tmux ls — список.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "lsof -i :порт",
+        "desc": "Кто использует порт",
+        "hint": "Альтернатива: ss -tlnp | grep порт",
+        "tip": "lsof -i :8080 — кто использует порт 8080. lsof -u имя — файлы пользователя. lsof /путь — кто использует файл.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "watch -n 2 команда",
+        "desc": "Выполнять команду каждые N секунд",
+        "hint": "watch -n 1 'free -h' = мониторинг RAM",
+        "tip": "watch -n 2 'команда' — выполняет команду каждые 2 секунды. watch -n 1 'df -h' — следить за местом. watch -n 1 'free -h' — за памятью.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "nice -n 10 команда",
+        "desc": "Запустить с пониженным приоритетом",
+        "hint": "От -20 (высший) до 19 (низший)",
+        "tip": "nice -n 10 команда — запустить с приоритетом 10 (ниже чем 0). renice -n 5 -p PID — изменить приоритет запущенного. Диапазон: -20 (макс) до 19 (мин).",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "network",
+    "title": "🌐 Сеть",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "ip addr show",
+        "desc": "IP-адреса интерфейсов",
+        "hint": "ip -4 a = только IPv4",
+        "tip": "ip a — показать все интерфейсы и IP. ip addr show eth0 — конкретный интерфейс. ip -4 a — только IPv4. ip -6 a — только IPv6.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "ip route show",
+        "desc": "Таблица маршрутизации (шлюзы)",
+        "hint": "default via = шлюз по умолчанию",
+        "tip": "ip route show — таблица маршрутизации. default via X.X.X.X — шлюз по умолчанию. ip route add 10.0.0.0/8 via 192.168.1.1 — добавить маршрут.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "ping -c 4 8.8.8.8",
+        "desc": "Проверка связи (4 пакета)",
+        "hint": "-c 4 = 4 пакета, потом выход",
+        "tip": "ping -c 4 8.8.8.8 — 4 пакета и выход. ping -c 4 google.com — проверка DNS. Если ping по IP работает, а по имени нет — проблема DNS.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "curl -I https://example.com",
+        "desc": "HTTP запрос (заголовки)",
+        "hint": "-I=headers, -o=скачать, -v=подробно",
+        "tip": "curl -I URL — только заголовки. curl -o файл URL — скачать. curl -s URL — тихо. curl -X POST -d 'data' URL — POST запрос. curl -v — подробный вывод.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "wget URL",
+        "desc": "Скачать файл",
+        "hint": "wget -r = рекурсивно, --spider = проверка",
+        "tip": "wget URL — скачать файл. wget -r URL — рекурсивно (сайт). wget --spider URL — проверить ссылку без скачивания.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "ss -tlnp",
+        "desc": "Открытые порты + процессы",
+        "hint": "-t=tcp, -l=listening, -n=числа, -p=process",
+        "tip": "ss -tlnp: t=tcp, l=listening, n=numeric, p=process. ss -tunap — все TCP+UDP соединения с процессами. Заменяет netstat.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "traceroute хост",
+        "desc": "Маршрут до хоста (hop by hop)",
+        "hint": "traceroute -T -p 80 = через TCP",
+        "tip": "traceroute показывает каждый хоп до цели. traceroute -T -p 80 google.com — через TCP порт 80 (если ICMP заблокирован).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "nslookup домен",
+        "desc": "DNS-запрос (домен → IP)",
+        "hint": "dig = более подробный аналог",
+        "tip": "nslookup google.com — IP домена. nslookup google.com 8.8.8.8 — через конкретный DNS. dig google.com — более подробный вывод.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "nc -zv хост порт",
+        "desc": "Скан порта / тест соединения",
+        "hint": "nc -l 8080 = слушать, nc хост 80 = коннект",
+        "tip": "netcat (nc) — швейцарский нож сети. nc -l 8080 — слушать порт. nc хост 80 — подключиться. nc -zv хост 22 — скан порта.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo ip link set eth0 up",
+        "desc": "Включить/выключить интерфейс",
+        "hint": "ip link set eth0 down/up",
+        "tip": "ip link set eth0 down/up — выключить/включить интерфейс. ip addr add 192.168.1.10/24 dev eth0 — назначить IP. ifdown/ifup — альтернатива.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "ifconfig",
+        "desc": "Сетевые интерфейсы (устарел!)",
+        "hint": "⚠️ Используй ip addr show вместо ifconfig",
+        "tip": "ifconfig устарел! Используй ip a. Но ifconfig всё ещё работает: ifconfig eth0 192.168.1.10 netmask 255.255.255.0 up.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo iftop -i eth0",
+        "desc": "Мониторинг трафика (iftop)",
+        "hint": "-n = без DNS (быстрее), -P = показать порты",
+        "tip": "iftop — мониторинг трафика в реальном времени по соединениям (как htop для сети). Показывает хосты, порты, скорость. sudo iftop -i eth0 — конкретный интерфейс. -n — не резолвить DNS (быстрее). -P — показать порты.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "nmap -sV 192.168.1.1",
+        "desc": "Сканер портов и сервисов (nmap)",
+        "hint": "-sV = версии, -A = всё сразу, -O = ОС, -p = порты",
+        "tip": "nmap -sT 192.168.1.1 — TCP скан. nmap -sS — SYN скан (по умолчанию, требует root). nmap -sV — определить версии сервисов. nmap -A — агрессивный (ОС + версии + скрипты). nmap -p 22,80,443 хост — сканировать порты. nmap -O — определить ОС.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "ssh-security",
+    "title": "🔑 SSH и безопасность",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "ssh -p порт user@host",
+        "desc": "Подключение (нестандартный порт)",
+        "hint": "-p = порт, -i = ключ, -X = X11 forwarding",
+        "tip": "ssh -p 2222 user@host — нестандартный порт. ssh -i ~/.ssh/key.pem user@host — с ключом. ssh -X user@host — проброс X11 (GUI).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "ssh-copy-id user@host",
+        "desc": "Копировать SSH ключ на сервер",
+        "hint": "После этого — вход без пароля!",
+        "tip": "ssh-copy-id user@host — копирует публичный ключ (~/.ssh/id_rsa.pub) на сервер. После этого вход без пароля. Ключи в ~/.ssh/authorized_keys.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "scp файл user@host:/путь",
+        "desc": "Копирование файлов через SSH",
+        "hint": "-r = рекурсивно, -P = порт",
+        "tip": "scp файл user@host:/путь — загрузить. scp user@host:/путь . — скачать. scp -r папка user@host:/путь — рекурсивно. scp -P 2222 — порт.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "rsync -avz /local user@host:/remote",
+        "desc": "Синхронизация файлов (умный rsync!)",
+        "hint": "Копирует ТОЛЬКО изменения! Быстрее scp!",
+        "tip": "rsync -avz /source user@host:/dest — синхронизация. -a=archive (сохраняет всё), -v=показать, -z=сжатие. rsync умный — копирует только изменения!",
+        "risk": "caution"
+      },
+      {
+        "cmd": "ssh-keygen -t ed25519",
+        "desc": "Генерация SSH ключа (ed25519)",
+        "hint": "ed25519 — современнее и безопаснее RSA",
+        "tip": "ssh-keygen -t ed25519 -C 'email' — современный алгоритм. ed25519 быстрее и безопаснее RSA. Файлы: id_ed25519 (приватный), id_ed25519.pub (публичный).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "ssh -L 8080:localhost:80 user@host",
+        "desc": "Проброс порта (local forwarding)",
+        "hint": "Доступ к серверным сервисам через localhost",
+        "tip": "ssh -L 8080:localhost:80 user@host — проброс порта 80 с сервера на твой localhost:8080. Доступ к сервисам сервера локально.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "~/.ssh/config",
+        "desc": "Конфиг SSH (алиасы серверов)",
+        "hint": "ssh myserver вместо полной команды!",
+        "tip": "~/.ssh/config: Host myserver → HostName, User, Port, IdentityFile. После настройки: ssh myserver вместо ssh user@host -p 2222 -i key.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo ufw allow 22",
+        "desc": "Firewall: разрешить порт",
+        "hint": "ufw allow from IP to any port 22 — по IP",
+        "tip": "sudo ufw allow 22 — разрешить SSH. sudo ufw allow from 192.168.1.0/24 to any port 22 — только из локальной сети. sudo ufw enable — включить.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo ufw status verbose",
+        "desc": "Статус firewall подробно",
+        "hint": "ufw delete N — удалить правило по номеру",
+        "tip": "sudo ufw status verbose — подробный статус. sudo ufw status numbered — с номерами правил. sudo ufw delete 3 — удалить правило №3.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo fail2ban-client status",
+        "desc": "Статус Fail2Ban (защита от брутфорса)",
+        "hint": "Банит IP после N неудачных входов",
+        "tip": "sudo fail2ban-client status sshd — статус защиты SSH. fail2ban банит IP после N неудачных попыток входа. Конфиг: /etc/fail2ban/jail.local.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "systemd-services",
+    "title": "🔧 Systemd (сервисы)",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "sudo systemctl start сервис",
+        "desc": "Запустить сервис",
+        "hint": "restart = перезапуск, reload = перечитать конфиг",
+        "tip": "sudo systemctl start nginx — запустить сервис. sudo systemctl restart nginx — перезапустить. sudo systemctl reload nginx — перечитать конфиг без остановки.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo systemctl enable сервис",
+        "desc": "Включить автозапуск",
+        "hint": "enable ≠ start! Только автозапуск при boot",
+        "tip": "sudo systemctl enable nginx — автозапуск при загрузке. disable — отключить. is-enabled — проверить. enable не запускает, только включает автозапуск!",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo systemctl status сервис",
+        "desc": "Статус сервиса + логи",
+        "hint": "active (running) = OK, failed = ошибка",
+        "tip": "sudo systemctl status nginx — статус, последние логи, PID, memory. active (running) = работает. failed = ошибка. inactive = остановлен.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo systemctl stop сервис",
+        "desc": "Остановить сервис",
+        "hint": "+ disable = убрать из автозапуска",
+        "tip": "sudo systemctl stop nginx — остановить. sudo systemctl disable nginx — убрать из автозапуска. Комбинация для полного отключения.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "journalctl -u сервис -f",
+        "desc": "Логи сервиса в реальном времени",
+        "hint": "-f=следить, -e=конец, --since=дата",
+        "tip": "journalctl -u nginx — логи сервиса. -f = следить в реальном времени. -e = конец (к новейшим). --since '2024-01-01' — с даты. --no-pager = без less.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "journalctl --since '1 hour ago'",
+        "desc": "Системные логи за период",
+        "hint": "-p err = только ошибки, -p warning = предупреждения",
+        "tip": "journalctl --since '1 hour ago' — за последний час. --since '2024-01-01 10:00' — с точной даты. journalctl -p err — только ошибки.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo systemctl list-units --type=service",
+        "desc": "Список всех сервисов",
+        "hint": "--state=failed = только упавшие",
+        "tip": "sudo systemctl list-units --type=service — все сервисы. --state=failed — только упавшие. list-unit-files — все unit-файлы (включая disabled).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo systemctl daemon-reload",
+        "desc": "Перечитать unit-файлы",
+        "hint": "Нужно после изменения .service файлов!",
+        "tip": "sudo systemctl daemon-reload — перечитать unit-файлы. Нужно после изменения /etc/systemd/system/*.service! Без этого systemctl не увидит изменения.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "/etc/systemd/system/имя.service",
+        "desc": "Файл юнита (создание сервиса)",
+        "hint": "Restart=always — автоперезапуск при крахе",
+        "tip": "/etc/systemd/system/имя.service: [Unit] — описание, [Service] — ExecStart, User, Restart, [Install] — WantedBy=multi-user.target. Restart=always — автоперезапуск при крахе.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo systemctl reset-failed",
+        "desc": "Сбросить статус failed-сервисов",
+        "hint": "Полезно после исправления ошибки",
+        "tip": "sudo systemctl kill --signal=HUP nginx — послать SIGHUP (перезагрузка конфига). sudo systemctl reset-failed — сбросить статус failed.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "/etc/systemd/system/app.service",
+        "desc": "Пример .service файла (создание сервиса)",
+        "hint": "daemon-reload → enable --now app",
+        "tip": "Пример /etc/systemd/system/app.service: [Unit] Description=My app, After=network.target. [Service] ExecStart=/usr/bin/python3 /opt/app/main.py, User=appuser, Restart=always, RestartSec=5, EnvironmentFile=/opt/app/.env. [Install] WantedBy=multi-user.target. После создания: systemctl daemon-reload && systemctl enable --now app.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "/etc/systemd/system/app.timer",
+        "desc": "Systemd timer (замена cron)",
+        "hint": "OnCalendar=daily, weekly, Mon..Fri 10:00, *-*-* 00/2:00",
+        "tip": "systemd timer — замена cron. Создаём app.service и app.timer: [Timer] OnCalendar=daily, Persistent=true. [Install] WantedBy=timers.target. systemctl enable --now app.timer. systemctl list-timers — список.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "EnvironmentFile=/etc/app.env",
+        "desc": "Переменные окружения для сервиса",
+        "hint": "Environment= прямо в файле, EnvironmentFile= из файла",
+        "tip": "Environment=MY_VAR=value — прямо в .service. EnvironmentFile=/etc/app.env — файл с KEY=value строками. Удобно для паролей и конфигов. Переменные видны в ExecStart.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "LimitNOFILE=65536",
+        "desc": "Лимиты ресурсов (файлы, процессы, таймауты)",
+        "hint": "Для БД и веб-серверов увеличь LimitNOFILE",
+        "tip": "LimitNOFILE=65536 — лимит открытых файлов (нужно для БД, веб-серверов). LimitNPROC= — макс процессов. TimeoutStartSec=300 — ждать запуска 5 мин. TimeoutStopSec=30 — ждать остановки 30с. User= — от какого пользователя запускать.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "systemd-analyze blame",
+        "desc": "Анализ загрузки системы и сервисов",
+        "hint": "blame = кто тормозит загрузку, verify = проверить синтаксис",
+        "tip": "systemd-analyze — время загрузки. systemd-analyze blame — какие службы дольше всего грузятся. systemd-analyze critical-chain — цепочка зависимостей. systemd-analyze verify файл.service — проверить синтаксис.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "systemd-run --unit=имя --on-calendar='*-*-* 02:00:00' /путь/команда",
+        "desc": "Создать timer/service на лету",
+        "hint": "Для постоянной задачи сохрани unit-файлы в /etc/systemd/system",
+        "tip": "Полная форма создаёт transient timer и service: systemd-run --unit=backup-now --on-calendar='*-*-* 02:00:00' /usr/local/bin/backup. Добавь --user для пользовательского manager. systemctl list-timers покажет timer.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo systemctl edit сервис",
+        "desc": "Переопределить конфиг сервиса (drop-in)",
+        "hint": "Создаёт override.conf — безопаснее чем менять оригинал",
+        "tip": "sudo systemctl edit nginx — создать drop-in override (файл в /etc/systemd/system/nginx.service.d/override.conf). Добавляешь только те опции, которые хочешь переопределить. Безопаснее чем менять оригинальный .service.",
+        "risk": "caution"
+      }
+    ]
+  },
+  {
+    "id": "logs",
+    "title": "📋 Логи",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "journalctl -b",
+        "desc": "Логи текущей загрузки",
+        "hint": "-b -1 = предыдущая загрузка",
+        "tip": "journalctl — основной источник системных логов на systemd. Файлы /var/log/syslog и auth.log появятся только при настроенном rsyslog. /var/log/dpkg.log остаётся журналом dpkg.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "tail -f /var/log/nginx/error.log",
+        "desc": "Логи Nginx (ошибки)",
+        "hint": "access.log = запросы, error.log = ошибки",
+        "tip": "/var/log/nginx/access.log — кто обращался. /var/log/nginx/error.log — ошибки nginx. /var/log/apache2/ — аналогично для Apache.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "journalctl -xe",
+        "desc": "Логи с пояснениями (debug)",
+        "hint": "-x = объяснения ошибок, -e = конец",
+        "tip": "journalctl -xe: -x = дополнительные пояснения, -e = конец журнала. Показывает последние логи с контекстом. Полезно при ошибках.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "dmesg | tail -20",
+        "desc": "Сообщения ядра",
+        "hint": "dmesg -T = читаемые даты",
+        "tip": "dmesg — сообщения ядра (загрузка, драйверы, железо). dmesg | tail — последние. dmesg -T — с читаемыми датами. dmesg | grep -i error — ошибки.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "journalctl -p err..alert -b",
+        "desc": "Ошибки текущей загрузки",
+        "hint": "Найдя проблему, уточни сервис через -u",
+        "tip": "journalctl -p err..alert показывает сообщения уровня error и критичнее. Добавь -b для текущей загрузки или -u сервис для конкретного unit.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "cat /etc/logrotate.conf",
+        "desc": "Конфигурация ротации логов",
+        "hint": "/etc/logrotate.d/ — конфиги отдельных сервисов",
+        "tip": "logrotate конфигурируется в /etc/logrotate.conf и /etc/logrotate.d/. Ротирует (сжимает, удаляет) логи. daily/weekly/monthly, rotate 7, compress.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "cat /etc/systemd/journald.conf",
+        "desc": "Настройка journald (размер, сжатие, хранение)",
+        "hint": "SystemMaxUse=500M — не даст логам забить диск",
+        "tip": "/etc/systemd/journald.conf — конфиг journald. SystemMaxUse=500M — макс размер логов (авто-ротация). Compress=yes — сжатие. Storage=persistent — сохранять на диск. SystemMaxFileSize=50M — макс размер одного файла.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "journalctl --vacuum-size=500M",
+        "desc": "Обслуживание journald (ротация, очистка)",
+        "hint": "vacuum-size и vacuum-time — экономия места вручную",
+        "tip": "journalctl --rotate — принудительная ротация (начать новый файл). journalctl --vacuum-size=500M — удалить логи старше этого объёма. journalctl --vacuum-time=30d — удалить логи старше 30 дней. journalctl --flush — сбросить из памяти на диск.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "journalctl -p err --since '1h ago'",
+        "desc": "Фильтр по уровню + время",
+        "hint": "-p err = только ошибки, -p warning = +предупреждения",
+        "tip": "journalctl -p err — только ошибки. journalctl -p err -p warning — ошибки и предупреждения. Уровни: emerg, alert, crit, err, warning, notice, info, debug. journalctl -p err --since '1 hour ago' — ошибки за час.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "journalctl _SYSTEMD_UNIT=nginx.service",
+        "desc": "Продвинутые фильтры journalctl",
+        "hint": "_PID, _EXE, _SYSTEMD_UNIT — поля для точной фильтрации",
+        "tip": "journalctl _SYSTEMD_UNIT=nginx.service — логи конкретного юнита. journalctl _PID=1234 — логи по PID. journalctl _EXE=/usr/bin/python3 — по пути к исполняемому файлу. journalctl -o json-pretty — формат JSON. journalctl -o verbose — все поля.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "journalctl -o json-pretty",
+        "desc": "Форматы вывода journalctl",
+        "hint": "json-pretty = читаемый JSON, cat = только сообщение",
+        "tip": "journalctl -o json-pretty — JSON с отступами. -o json — одна строка (для парсинга). -o verbose — все поля с описанием. -o cat — только сообщение (без метаданных). -o short — односрочный формат.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "users-permissions",
+    "title": "👤 Пользователи и права",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "sudo adduser имя",
+        "desc": "Создать пользователя (интерактивно)",
+        "hint": "adduser удобнее чем useradd",
+        "tip": "sudo adduser имя — интерактивное создание (спросит пароль, инфо). useradd — низкоуровневый (без интерактива). adduser = обёртка над useradd.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo usermod -aG sudo имя",
+        "desc": "Добавить в группу (sudo/docker)",
+        "hint": "-a ОБЯЗАТЕЛЬНО! Без -a сотрёт другие группы!",
+        "tip": "sudo usermod -aG sudo имя — добавить в группу sudo (админ). -a = append (добавить, НЕ заменить!), -G = дополнительные группы. БЕЗ -a сотрёт другие группы!",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo deluser --remove-home имя",
+        "desc": "Удалить пользователя + домашнюю папку",
+        "hint": "--remove-home = удалить /home/имя",
+        "tip": "sudo deluser --remove-home имя — удалить пользователя + домашнюю папку. Просто deluser — удалить без папки.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "id имя",
+        "desc": "Информация о пользователе",
+        "hint": "last = последние входы, whoami = текущий",
+        "tip": "id имя — UID, GID, группы. groups имя — список групп. whoami — текущий пользователь. last — последние входы. lastb — неудачные входы.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo passwd имя",
+        "desc": "Сменить пароль пользователя",
+        "hint": "-l = заблокировать, -u = разблокировать",
+        "tip": "sudo passwd имя — сменить пароль пользователя. sudo passwd -l имя — заблокировать (lock). sudo passwd -u имя — разблокировать (unlock).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo visudo",
+        "desc": "Редактировать sudoers (безопасно!)",
+        "hint": "⚠️ НЕ редактируй /etc/sudoers напрямую!",
+        "tip": "/etc/sudoers — файл настроек sudo. НЕ редактируй напрямую! Используй visudo (проверяет синтаксис). Ошибка в sudoers = потеря sudo!",
+        "risk": "safe"
+      },
+      {
+        "cmd": "umask 022",
+        "desc": "Маска прав для новых файлов",
+        "hint": "022 = rw-r--r-- для файлов",
+        "tip": "umask 022 — новые файлы 644, папки 755. umask 077 — новые файлы 600, папки 700 (только владелец). umask показывает текущее значение.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo -u пользователь команда",
+        "desc": "Выполнить от другого пользователя",
+        "hint": "sudo -i = login shell как root",
+        "tip": "sudo -u имя команда — выполнить команду от другого пользователя. sudo -i — login shell как root. sudo -s — shell как root (сохраняет окружение).",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "disks-fs",
+    "title": "💾 Диски и файловые системы",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "lsblk",
+        "desc": "Блочные устройства (диски, разделы)",
+        "hint": "lsblk -f = с ФС и UUID",
+        "tip": "lsblk — дерево блочных устройств (диски, разделы, mount points). lsblk -f — добавить файловую систему и UUID. lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "df -hi",
+        "desc": "Место + inodes",
+        "hint": "inodes могут закончиться раньше места!",
+        "tip": "df -h — человеко-читаемый вывод. df -i — использование inodes (если inodes кончились — не создать файл даже при свободном месте!).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "findmnt",
+        "desc": "Смонтированные файловые системы",
+        "hint": "findmnt -t ext4 = только ext4",
+        "tip": "findmnt — все смонтированные файловые системы. findmnt -t ext4 — только ext4. mount | column -t — альтернативный вывод.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo mount /dev/sdb1 /mnt",
+        "desc": "Примонтировать раздел",
+        "hint": "umount = размонтировать, mount -a = всё из fstab",
+        "tip": "sudo mount /dev/sdb1 /mnt — примонтировать раздел. sudo umount /mnt — размонтировать. sudo mount -a — примонтировать всё из fstab.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo nano /etc/fstab",
+        "desc": "Авто-монтирование при загрузке",
+        "hint": "⚠️ Ошибка = система не загрузится!",
+        "tip": "/etc/fstab — таблица авто-монтирования при загрузке. Формат: UUID=xxx /mount-point ext4 defaults 0 2. Ошибка в fstab = система не загрузится!",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo fdisk -l",
+        "desc": "Информация о разделах диска",
+        "hint": "fdisk /dev/sdb = редактирование разделов",
+        "tip": "sudo fdisk -l — все диски и разделы. cfdisk / fdisk /dev/sdb — интерактивное управление разделами. gdisk — для GPT. parted — альтернатива.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo mkfs.ext4 /dev/sdb1",
+        "desc": "Форматировать раздел в ext4",
+        "hint": "⚠️ Все данные будут уничтожены!",
+        "tip": "sudo mkfs.ext4 /dev/sdb1 — форматировать в ext4. mkfs.xfs, mkfs.btrfs — другие ФС. Форматирование УНИЧТОЖАЕТ все данные!",
+        "risk": "danger"
+      },
+      {
+        "cmd": "sudo fsck /dev/sdb1",
+        "desc": "Проверить файловую систему",
+        "hint": "НЕ запускай на смонтированном разделе!",
+        "tip": "sudo fsck /dev/sdb1 — проверить и исправить ФС. fsck -f — форсировать. fsck -n — только проверка (без исправлений). НЕ запускать на смонтированном!",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo dd if=образ of=/dev/sdb bs=4M",
+        "desc": "Записать образ на диск/флешку",
+        "hint": "⚠️ Уничтожит ВСЕ данные на целевом устройстве!",
+        "tip": "sudo dd if=/dev/zero of=/dev/sdb bs=1M — забить диск нулями (удаление данных). dd if=image.iso of=/dev/sdb bs=4M — записать образ на флешку. ОЧЕНЬ ОПАСНО!",
+        "risk": "danger"
+      },
+      {
+        "cmd": "sudo lsof +D /путь",
+        "desc": "Кто использует папку/диск (рекурсивно)",
+        "hint": "+D = рекурсивно по папке, без +D = только файл",
+        "tip": "lsof /mnt — кто использует точку монтирования (мешает umount). fuser -mv /mnt — аналог. fuser -km /mnt — убить все процессы (осторожно!).",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "git",
+    "title": "🔀 Git",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "git init",
+        "desc": "Инициализировать репозиторий",
+        "hint": "--bare = серверный репозиторий",
+        "tip": "git init — инициализировать репозиторий. git init --bare — bare-репозиторий (для сервера, без working directory).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git clone URL",
+        "desc": "Клонировать репозиторий",
+        "hint": "--depth 1 = только последний коммит",
+        "tip": "git clone URL — клонировать. git clone --depth 1 URL — shallow clone (только последний коммит, быстрее). git clone --branch имя URL — конкретная ветка.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git add -p",
+        "desc": "Добавить изменения (по кускам!)",
+        "hint": "-p = интерактивно, выбираешь какие ханки добавить",
+        "tip": "git status — изменения. git add . — все изменения. git add -p — интерактивно (по кускам/hunks). git add файл — конкретный файл.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git commit -m \"сообщение\"",
+        "desc": "Создать коммит",
+        "hint": "--amend = изменить последний коммит",
+        "tip": "git commit -m 'сообщение' — коммит. git commit --amend — изменить последний коммит (сообщение или добавить файлы). Не amend после push!",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git push -u origin main",
+        "desc": "Отправить + установить upstream",
+        "hint": "--force-with-lease безопаснее --force",
+        "tip": "git push — отправить. git push -u origin main — установить upstream. git push --force — форсированный push (опасно!). git push --force-with-lease — безопасный force.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git pull --rebase",
+        "desc": "Обновить с rebase (чистая история)",
+        "hint": "pull --rebase чище чем обычный merge",
+        "tip": "git pull = git fetch + git merge. git pull --rebase = fetch + rebase (чистая история). git fetch — скачать без слияния. git fetch --all — все ремоуты.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git log --oneline --graph --all",
+        "desc": "Красивый лог коммитов",
+        "hint": "--oneline=коротко, --graph=дерево, --all=все ветки",
+        "tip": "git log --oneline --graph --all — красивое дерево коммитов. git log --oneline -10 — последние 10. git log --author='имя' — по автору.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git diff",
+        "desc": "Показать изменения (не staged)",
+        "hint": "--cached = staged, HEAD~1..HEAD = между коммитами",
+        "tip": "git diff — незакоммиченные изменения. git diff --cached — staged изменения. git diff HEAD~1 HEAD — разница между последними коммитами.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git stash",
+        "desc": "Временно спрятать изменения",
+        "hint": "stash pop = вернуть+удалить, stash apply = вернуть",
+        "tip": "git stash — спрятать изменения. git stash pop — вернуть и удалить из stash. git stash list — список. git stash apply — вернуть без удаления.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git checkout -b имя-ветки",
+        "desc": "Создать и переключиться на ветку",
+        "hint": "git switch имя-ветки — новый аналог checkout",
+        "tip": "git branch — список веток. git branch имя — создать. git checkout имя — переключиться. git checkout -b имя — создать и переключиться. git branch -d имя — удалить (безопасно).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git merge ветка",
+        "desc": "Слить ветку в текущую",
+        "hint": "rebase = линейная история, merge = слияние",
+        "tip": "git merge ветка — слить ветку в текущую. git rebase ветка — переместить коммиты поверх ветки. rebase = линейная история, merge = сохраняет ветвление.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git reset --soft HEAD~1",
+        "desc": "Отменить последний коммит (сохранить изменения)",
+        "hint": "--hard = УДАЛИТЬ изменения навсегда!",
+        "tip": "git reset --soft HEAD~1 — отменить коммит, изменения останутся staged. --mixed (default) — unstaged. --hard — УДАЛИТЬ изменения навсегда!",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git revert коммит",
+        "desc": "Отменить коммит (безопасно!)",
+        "hint": "Создаёт новый коммит — безопасно для общих реп",
+        "tip": "git revert коммит — создать НОВЫЙ коммит, отменяющий изменения старого коммита. Безопасно для shared-репозиториев (в отличие от reset --hard).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git blame файл",
+        "desc": "Кто менял каждую строку",
+        "hint": "-L 10,20 = строки 10-20, -w = игнорировать пробелы",
+        "tip": "git blame файл — показать кто и когда менял каждую строку. git blame -L 10,20 файл — строки 10-20. git blame -w — игнорировать пробелы.",
+        "risk": "safe"
+      },
+      {
+        "cmd": ".gitignore",
+        "desc": "Игнорировать файлы",
+        "hint": "*.log, .env, node_modules/, __pycache__/",
+        "tip": ".gitignore — файлы/папки которые git НЕ будет отслеживать. *.log, node_modules/, .env, __pycache__/, *.pyc. git rm --cached файл — убрать из отслеживания.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git merge ветка",
+        "desc": "Разрешение merge конфликта",
+        "hint": "Исправь файлы → git add → git commit",
+        "tip": "git merge создаёт merge commit. Если конфликт: git status покажет конфликтующие файлы, исправь их, git add, git commit. git merge --abort — отменить слияние. git mergetool — визуальный diff.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git rebase -i HEAD~3",
+        "desc": "Интерактивный rebase (переписывание истории)",
+        "hint": "squash, reword, edit, drop — НЕ для shared веток!",
+        "tip": "git rebase -i HEAD~3 — переписать 3 последних коммита: squash (объединить), reword (изменить сообщение), edit (разделить), drop (удалить), pick. Не rebase push-нутые коммиты!",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git cherry-pick abc123",
+        "desc": "Применить коммит из другой ветки",
+        "hint": "Хорошо для hotfix — перенос фикса без merge",
+        "tip": "git cherry-pick коммит — применить конкретный коммит из другой ветки. Полезно для hotfix: git cherry-pick -x abc123 (добавляет ссылку на оригинал).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git reflog",
+        "desc": "История всех действий (страховка)",
+        "hint": "Поможет после ошибочного reset --hard!",
+        "tip": "git reflog — история ВСЕХ действий (включая reset, rebase). Можно восстановить 'потерянные' коммиты: git checkout HEAD@{2}. Reflog хранится 90 дней.",
+        "risk": "safe"
+      },
+      {
+        "cmd": ".git/hooks/pre-commit",
+        "desc": "Git hooks (автоматизация перед коммитом/push)",
+        "hint": "Можно авто-запускать линтер, тесты, форматтер",
+        "tip": "Git hooks — скрипты в .git/hooks/: pre-commit (перед коммитом), pre-push (перед push). pre-commit — проверка линтером, тестами. chmod +x .git/hooks/pre-commit для активации.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git submodule add URL",
+        "desc": "Подмодули (репозиторий внутри репозитория)",
+        "hint": "clone --recurse-submodules = всё сразу",
+        "tip": "git submodule add URL папка — добавить подмодуль. git clone --recurse-submodules URL — клонировать с подмодулями. git submodule update --init — подтянуть подмодули. git submodule update --remote — обновить.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "git describe --tags",
+        "desc": "Версия из тегов (для CI/CD)",
+        "hint": "v1.2.3-5-gabc1234 = 5 коммитов после тега",
+        "tip": "git describe --tags — показать ближайший тег + кол-во коммитов после него (напр. v1.2.3-5-gabc1234). Полезно для версионирования в CI/CD. git describe --always — всегда показывать что-то, даже без тегов.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "nginx",
+    "title": "🌐 Nginx (веб-сервер)",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "sudo nginx -t",
+        "desc": "Проверить конфиг Nginx",
+        "hint": "⚠️ Всегда перед reload/restart!",
+        "tip": "sudo nginx -t — проверить синтаксис конфига БЕЗ перезагрузки. ВСЕГДА делай перед reload! Показывает файл и строку с ошибкой.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo nginx -s reload",
+        "desc": "Перезагрузить конфиг (без остановки)",
+        "hint": "Не рвёт активные соединения!",
+        "tip": "sudo nginx -s reload — перечитать конфиг без остановки. sudo systemctl reload nginx — аналог через systemd. Не разорвёт активные соединения!",
+        "risk": "safe"
+      },
+      {
+        "cmd": "/etc/nginx/nginx.conf",
+        "desc": "Главный конфиг Nginx",
+        "hint": "sites-available/ → sites-enabled/ через symlink",
+        "tip": "/etc/nginx/nginx.conf — главный конфиг. /etc/nginx/sites-available/ — доступные сайты. /etc/nginx/sites-enabled/ — включенные (symlink).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "server_name example.com",
+        "desc": "Блок server (виртуальный хост)",
+        "hint": "listen 80/443, server_name = домен, root = путь",
+        "tip": "server { listen 80; server_name example.com; root /var/www/html; location / { try_files $uri $uri/ =404; } } — минимальный конфиг для статического сайта.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "proxy_pass http://localhost:3000",
+        "desc": "Проксирование на бэкенд",
+        "hint": "Не забудь proxy_set_header Host $host!",
+        "tip": "location /api/ { proxy_pass http://localhost:3000; proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; } — проксирование на бэкенд.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo ln -s sites-available/ sites-enabled/",
+        "desc": "Включить/выключить сайт",
+        "hint": "После: nginx -t && nginx -s reload",
+        "tip": "sudo ln -s /etc/nginx/sites-available/site /etc/nginx/sites-enabled/ — включить сайт. sudo rm /etc/nginx/sites-enabled/site — выключить. Потом nginx -t + reload.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "return 301 https://$host$request_uri;",
+        "desc": "Редирект HTTP → HTTPS",
+        "hint": "В блоке listen 80 для принудительного HTTPS",
+        "tip": "return 301 https://$host$request_uri; — редирект HTTP → HTTPS. В server { listen 80; } блоке.$request_uri = полный URI с query string.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo certbot --nginx -d домен",
+        "desc": "SSL сертификат (Let's Encrypt)",
+        "hint": "certbot renew = обновление (добавь в cron!)",
+        "tip": "sudo certbot --nginx -d example.com — получить и настроить SSL сертификат Let's Encrypt автоматически. certbot renew — обновить (в крон).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "gzip on;",
+        "desc": "Включить gzip сжатие",
+        "hint": "Ускоряет загрузку в 3-5 раз для текста!",
+        "tip": "gzip on; gzip_types text/plain application/json application/javascript text/css; — включить сжатие. Ускоряет загрузку в 3-5 раз для текстовых файлов.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "access_log /var/log/nginx/access.log",
+        "desc": "Логи Nginx",
+        "hint": "Уровни: debug, info, notice, warn, error, crit",
+        "tip": "access_log /var/log/nginx/access.log; error_log /var/log/nginx/error.log; — пути к логам. Можно указать уровень: error_log ... warn; (debug, info, notice, warn, error, crit).",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "docker",
+    "title": "🐳 Docker",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "docker ps -a",
+        "desc": "Все контейнеры (включая stopped)",
+        "hint": "-a = все, --format = кастомный вывод",
+        "tip": "docker ps — запущенные. docker ps -a — все (включая остановленные). docker ps --format '{{.Names}}\\t{{.Status}}' — кастомный вывод.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "docker images",
+        "desc": "Локальные образы",
+        "hint": "--format = кастомный формат вывода",
+        "tip": "docker images — локальные образы. docker images -a — включая intermediate. docker images --format 'table {{.Repository}}\\t{{.Tag}}\\t{{.Size}}'.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "docker pull образ:тег",
+        "desc": "Скачать образ (конкретный тег)",
+        "hint": "Фиксируй версию! :latest на PROD = плохо",
+        "tip": "docker pull nginx:alpine — конкретный тег. alpine — минимальный образ (~5MB). latest — по умолчанию. :latest на PROD — плохо, фиксируй версию!",
+        "risk": "caution"
+      },
+      {
+        "cmd": "docker run -d --name имя -p 80:80 -v /host:/cont образ",
+        "desc": "Запустить контейнер (полный набор)",
+        "hint": "-d=фон, -p=порт, -v=volume, -e=env, --restart=автозапуск",
+        "tip": "docker run -d --name имя -p 8080:80 -v /host:/container -e ENV=value --restart unless-stopped образ. -d=фон, -p=порт, -v=volume, -e=env, --restart=автозапуск.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "docker exec -it контейнер sh",
+        "desc": "Зайти внутрь контейнера",
+        "hint": "sh для alpine, bash для ubuntu/debian",
+        "tip": "docker exec -it контейнер sh — зайти (alpine). docker exec -it контейнер bash — зайти (ubuntu/debian). docker exec контейнер команда — выполнить без входа.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "docker logs -f --tail 100 контейнер",
+        "desc": "Логи контейнера (последние 100 строк)",
+        "hint": "-f=следить, --tail=N=последние N, --since=время",
+        "tip": "docker logs контейнер — все логи. docker logs -f контейнер — следить. docker logs --tail 100 контейнер — последние 100 строк. docker logs --since 1h контейнер — за час.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "docker stop контейнер",
+        "desc": "Остановить контейнер (graceful)",
+        "hint": "docker kill = мгновенно (SIGKILL)",
+        "tip": "docker stop контейнер — graceful (SIGTERM → SIGKILL через 10с). docker kill контейнер — сразу SIGKILL. docker stop -t 30 контейнер — ждать 30с.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "docker rm -f $(docker ps -aq)",
+        "desc": "Удалить ВСЕ контейнеры",
+        "hint": "$(docker ps -aq) = список всех ID",
+        "tip": "docker rm контейнер — удалить stopped. docker rm -f контейнер — удалить running. docker rmi образ — удалить образ. docker system prune -a — удалить ВСЁ неиспользуемое.",
+        "risk": "danger"
+      },
+      {
+        "cmd": "docker compose up -d",
+        "desc": "Compose v2: запуск в фоне",
+        "hint": "down -v = удалить volumes и данные",
+        "tip": "Compose v2 — плагин Docker: docker compose up -d. down остановит и удалит контейнеры/сети; down -v также удалит именованные volumes, поэтому сначала проверь данные.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "docker compose exec сервис sh",
+        "desc": "Compose v2: зайти в сервис",
+        "hint": "logs -f сервис = логи сервиса",
+        "tip": "docker compose exec сервис sh открывает shell внутри работающего сервиса. docker compose logs -f сервис покажет его логи; ps — статус сервисов.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "docker build -t имя:тег .",
+        "desc": "Собрать образ из Dockerfile",
+        "hint": "--no-cache = без кэша, -f = другой файл",
+        "tip": "docker build -t имя:тег . — собрать из Dockerfile в текущей папке. docker build --no-cache -t имя:тег . — без кэша. docker build -f Dockerfile.prod -t имя . — другой Dockerfile.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "docker system df",
+        "desc": "Использование места Docker",
+        "hint": "prune -a --volumes = удалить ВСЁ неиспользуемое",
+        "tip": "docker system df — использование места. docker system prune — удалить unused. docker system prune -a --volumes — удалить ВСЁ (включая unused образы и volumes).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "docker cp контейнер:/путь ./",
+        "desc": "Копировать файлы из/в контейнер",
+        "hint": "Лучше используй volumes для постоянного хранения",
+        "tip": "docker cp контейнер:/путь /локальный — из контейнера. docker cp /локальный контейнер:/путь — в контейнер. Альтернатива: volumes.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "Dockerfile",
+        "desc": "Основные инструкции Dockerfile",
+        "hint": "FROM, WORKDIR, COPY, RUN, CMD, EXPOSE, ENV",
+        "tip": "Dockerfile: FROM образ — база. WORKDIR /app — рабочая директория. COPY . . — скопировать. RUN команда — выполнить при сборке. CMD ['команда'] — команда при запуске. EXPOSE порт.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "Dockerfile (multi-stage)",
+        "desc": "Multi-stage build (маленький финальный образ)",
+        "hint": "Собираем в builder, копируем бинарник в чистый образ",
+        "tip": "Multi-stage: FROM image AS builder — промежуточный образ для сборки. FROM alpine:latest — финальный лёгкий образ. COPY --from=builder /app/binary /app/. Итоговый образ — только бинарник (без компилятора!).",
+        "risk": "safe"
+      },
+      {
+        "cmd": ".dockerignore",
+        "desc": "Игнорировать файлы при сборке",
+        "hint": "node_modules/, .git, .env — не попадут в образ",
+        "tip": ".dockerignore — исключает файлы из контекста сборки. Пример: node_modules/, .git, *.log, .env, __pycache__/. Ускоряет build и уменьшает размер.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "docker network create mynet",
+        "desc": "Создать сеть для контейнеров",
+        "hint": "Контейнеры в одной сети видят друг друга по имени",
+        "tip": "docker network create mynet — создать сеть. docker run --network mynet — подключить к сети. Контейнеры в одной сети видят друг друга по имени. bridge — изолированная сеть по умолчанию. host — без изоляции.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "docker volume create myvol",
+        "desc": "Именованный volume (сохраняет данные)",
+        "hint": "volumes живут даже после docker rm контейнера",
+        "tip": "docker volume create myvol — создать именованный volume (сохраняется при rm контейнера). docker run -v myvol:/data — подключить. docker volume prune — удалить неиспользуемые volumes. bind mount: -v /host/path:/container/path.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "docker run --restart=unless-stopped",
+        "desc": "Политика перезапуска контейнера",
+        "hint": "always vs unless-stopped vs on-failure:N",
+        "tip": "docker run --restart=always — автоперезапуск при крахе/перезагрузке unless-stopped — перезапускается всегда, кроме ручной остановки on-failure:5 — до 5 попыток при крахе",
+        "risk": "caution"
+      },
+      {
+        "cmd": "docker run --health-cmd",
+        "desc": "Healthcheck (проверка здоровья контейнера)",
+        "hint": "Добавляй в Dockerfile: HEALTHCHECK CMD ...",
+        "tip": "docker run --health-cmd='curl -f http://localhost || exit 1' --health-interval=30s --health-retries=3 — проверка здоровья. docker inspect --format='{{json .State.Health}}' контейнер — статус.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "docker system prune",
+        "desc": "Очистка неиспользуемых ресурсов Docker",
+        "hint": "prune -a = ещё и образы без контейнеров",
+        "tip": "docker system prune — удалить остановленные контейнеры, неиспользуемые сети, build cache. docker container prune — только контейнеры. docker image prune — только образы без тегов. docker volume prune — только volumes. docker system prune -a — всё.",
+        "risk": "caution"
+      }
+    ]
+  },
+  {
+    "id": "python",
+    "title": "🐍 Python",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "python3 --version",
+        "desc": "Проверить версию Python",
+        "hint": "command -v python3 = путь; для проектов используй venv",
+        "tip": "python3 --version показывает версию системного Python, а command -v python3 — путь к интерпретатору. Не переключай системный Python через update-alternatives: для проектов создавай отдельные venv.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "python3 -m venv venv",
+        "desc": "Создать виртуальное окружение",
+        "hint": "--system-site-packages = доступ к глобальным пакетам",
+        "tip": "python3 -m venv venv — создать окружение в папке venv. python3 -m venv --system-site-packages venv — с доступом к глобальным пакетам.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "source venv/bin/activate",
+        "desc": "Активировать venv",
+        "hint": ". venv/bin/activate = то же самое (сокращение)",
+        "tip": "source venv/bin/activate — активировать (bash/zsh). . venv/bin/activate — сокращение. deactivate — деактивировать. В Windows: venv\\Scripts\\activate.bat.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "python3 -m venv .venv && . .venv/bin/activate",
+        "desc": "Создать изолированное Python-окружение",
+        "hint": "Не запускай системный pip install вне venv",
+        "tip": "Debian защищает системный Python как externally managed. Создай venv и используй его pip: python3 -m venv .venv && . .venv/bin/activate && python -m pip install пакет==версия. Для CLI-приложений используй pipx install.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "pip freeze > requirements.txt",
+        "desc": "Экспорт зависимостей",
+        "hint": "pip list --outdated = проверить обновления",
+        "tip": "pip freeze > requirements.txt — экспорт. pip install -r requirements.txt — установка. pip list — все пакеты. pip list --outdated — какие можно обновить.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "pipenv install пакет",
+        "desc": "Pipenv (альтернатива venv+pip)",
+        "hint": "Pipfile.lock = фиксированные версии",
+        "tip": "pipenv install flask — установить через Pipfile. pipenv shell — войти в shell. pipenv run python скрипт.py — запустить без входа. Pipfile.lock — фиксированные версии.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "poetry add пакет",
+        "desc": "Poetry (менеджер пакетов + сборка)",
+        "hint": "pyproject.toml = современный стандарт",
+        "tip": "poetry init — создать pyproject.toml. poetry add flask — добавить зависимость. poetry install — установить все. poetry run python скрипт.py — запустить. poetry build — собрать пакет.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "python3 -m http.server 8000",
+        "desc": "Простой HTTP сервер",
+        "hint": "⚠️ ТОЛЬКО для тестов, НЕ для production!",
+        "tip": "python3 -m http.server 8000 — простой HTTP сервер (для тестов/обмена файлами). python3 -m http.server 8000 --directory /путь — указать папку. НЕ для PROD!",
+        "risk": "safe"
+      },
+      {
+        "cmd": "python3 -c \"import модуль\"",
+        "desc": "Проверить импорт модуля",
+        "hint": "-c = выполнить строку кода",
+        "tip": "python3 -c 'import sys; print(sys.path)' — пути поиска модулей. PYTHONPATH=/путь python3 скрипт.py — добавить путь. sys.path.insert(0, '/путь') — в скрипте.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "gunicorn app:app -w 4 -b 0.0.0.0:8000",
+        "desc": "WSGI сервер для Flask (production)",
+        "hint": "-w workers = 2*CPU+1, НЕ flask run!",
+        "tip": "gunicorn app:app -w 4 -b 0.0.0.0:8000 — WSGI сервер для Flask/FastAPI. -w = workers (2*CPU+1). uvicorn для FastAPI. НЕ используй flask run на PROD!",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "nodejs-npm",
+    "title": "🟢 Node.js / npm",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "node -v",
+        "desc": "Версии Node.js и npm",
+        "hint": "nvm install 20 = установить Node 20",
+        "tip": "node -v — версия Node.js. npm -v — версия npm. npx --version — версия npx. nvm list — установленные версии Node. nvm install 20 — установить Node 20.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "npm init -y",
+        "desc": "Создать package.json",
+        "hint": "-y = использовать значения по умолчанию",
+        "tip": "npm init -y — создать package.json (default). npm init — интерактивно. npm init vue@latest — создать Vue проект. npm create vite@latest — Vite проект.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "npm install пакет",
+        "desc": "Установить пакет",
+        "hint": "--save-dev = только для разработки",
+        "tip": "npm install — установить все из package.json. npm install пакет — добавить зависимость. npm install --save-dev пакет — dev зависимость. npm ci — чистая установка (для CI/CD).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "npm run скрипт",
+        "desc": "Запустить npm скрипт",
+        "hint": "npm run = список всех доступных скриптов",
+        "tip": "npm run build — запустить скрипт build из package.json. npm start — запустить start. npm run — список всех скриптов. npm test — запустить тесты.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "npx пакет",
+        "desc": "Запустить пакет без установки",
+        "hint": "Скачивает временно, запускает, удаляет",
+        "tip": "npx команда — запустить пакет без установки. npx create-react-app имя — создать React проект. npx tsc — TypeScript компилятор. npx jest — запустить тесты.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "pm2 start app.js --name \"app\"",
+        "desc": "PM2: запуск Node.js приложения",
+        "hint": "pm2 startup = автозапуск при загрузке системы",
+        "tip": "pm2 start app.js — запустить через PM2. pm2 list — статус. pm2 logs — логи. pm2 restart имя — перезапустить. pm2 stop имя — остановить. pm2 delete имя — удалить. pm2 startup — автозапуск при boot.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "databases",
+    "title": "🗄️ Базы данных",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "sudo -u postgres psql",
+        "desc": "PostgreSQL: подключение",
+        "hint": "\\l = базы, \\dt = таблицы, \\q = выход",
+        "tip": "sudo systemctl status postgresql — статус. sudo -u postgres psql — войти как postgres. psql -U user -d dbname — подключиться. \\l — список БД, \\dt — таблицы, \\q — выход.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo -u postgres createdb dbname",
+        "desc": "PostgreSQL: создать БД",
+        "hint": "createuser = создать роль, dropdb = удалить",
+        "tip": "sudo -u postgres createuser имя — создать роль. sudo -u postgres createdb dbname — создать БД. sudo -u postgres dropdb dbname — удалить БД.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "pg_dump dbname > backup.sql",
+        "desc": "PostgreSQL: бэкап базы",
+        "hint": "-Fc = кастомный формат (сжатый, лучше)",
+        "tip": "pg_dump dbname > backup.sql — дамп БД. pg_dump -Fc dbname > backup.dump — кастомный формат (сжатый). pg_restore -d dbname backup.dump — восстановить.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "mysqldump -u root -p dbname > backup.sql",
+        "desc": "MySQL: бэкап базы",
+        "hint": "mysql < backup.sql = восстановить",
+        "tip": "mysqldump -u root -p dbname > backup.sql — дамп MySQL. mysql -u root -p dbname < backup.sql — восстановить. mysql -u root -p — подключиться.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "redis-cli --scan --pattern 'prefix:*'",
+        "desc": "Redis: безопасный обход ключей",
+        "hint": "SCAN итеративен; не используй KEYS * в production",
+        "tip": "redis-cli ping → PONG, SET/GET работают с ключами. Не запускай KEYS * на рабочем Redis: команда блокирует сервер. Для обхода ключей используй курсорный SCAN, например redis-cli --scan --pattern 'prefix:*'.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "mongosh",
+        "desc": "MongoDB shell",
+        "hint": "use dbname, show dbs, show collections",
+        "tip": "mongosh — MongoDB shell. mongosh mongodb://user:pass@host:27017/db — подключение. use dbname — переключить БД. show dbs — список БД. show collections — коллекции.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sqlite3 database.db",
+        "desc": "SQLite CLI",
+        "hint": ".tables = таблицы, .schema = схема, .dump = дамп",
+        "tip": "sqlite3 database.db — открыть/создать БД. .tables — список таблиц. .schema таблица — схема. .dump — полный дамп. .exit — выход. SELECT * FROM table; — запрос.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "kubernetes",
+    "title": "☸️ Kubernetes",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "kubectl get pods -A",
+        "desc": "Все поды (все namespace)",
+        "hint": "-o wide = больше инфо, --watch = следить",
+        "tip": "kubectl get pods — поды в текущем namespace. kubectl get pods -A — все namespaces. kubectl get pods -o wide — больше инфо (node, IP). kubectl get pods --watch — следить.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "kubectl get deployments",
+        "desc": "Деплойменты",
+        "hint": "get svc = сервисы, get nodes = ноды",
+        "tip": "kubectl get services / kubectl get svc — сервисы. kubectl get deployments — деплойменты. kubectl get ingress — ingress правила. kubectl get nodes — ноды кластера.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "kubectl describe pod имя",
+        "desc": "Детали пода (события, ошибки)",
+        "hint": "Смотри Events внизу вывода!",
+        "tip": "kubectl describe pod имя — детальная информация (события, ошибки). kubectl describe node имя — инфо о ноде. kubectl describe svc имя — инфо о сервисе.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "kubectl logs -f pod-name",
+        "desc": "Логи пода (в реальном времени)",
+        "hint": "-c контейнер = конкретный контейнер в поде",
+        "tip": "kubectl logs pod-name — логи. kubectl logs -f pod-name — следить. kubectl logs pod-name -c контейнер — конкретный контейнер в поде. kubectl logs --tail 100 pod-name — последние 100 строк.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "kubectl exec -it pod-name -- sh",
+        "desc": "Зайти в под",
+        "hint": "sh = alpine, bash = ubuntu/debian",
+        "tip": "kubectl exec -it pod-name -- sh — зайти в под. kubectl exec -it pod-name -- bash — если есть bash. kubectl exec pod-name -- команда — выполнить без входа.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "kubectl apply -f файл.yaml",
+        "desc": "Применить YAML конфигурацию",
+        "hint": "apply = создать/обновить, delete = удалить",
+        "tip": "kubectl apply -f файл.yaml — применить конфигурацию. kubectl apply -f папка/ — все yaml в папке. kubectl delete -f файл.yaml — удалить. kubectl create -f файл.yaml — создать.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "kubectl rollout restart deploy/имя",
+        "desc": "Перезапустить deployment",
+        "hint": "rollout undo = откатить к предыдущей версии",
+        "tip": "kubectl rollout status deploy/имя — статус деплоя. kubectl rollout history deploy/имя — история. kubectl rollout undo deploy/имя — откатить. kubectl rollout restart deploy/имя — перезапустить.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "kubectl scale deploy/имя --replicas=3",
+        "desc": "Масштабировать deployment",
+        "hint": "autoscale = автомасштабирование по CPU",
+        "tip": "kubectl scale deploy/имя --replicas=3 — масштабировать. kubectl autoscale deploy/имя --min=2 --max=10 --cpu-percent=80 — HPA (автомасштабирование).",
+        "risk": "caution"
+      },
+      {
+        "cmd": "kubectl port-forward svc/имя 8080:80",
+        "desc": "Проброс порта к сервису",
+        "hint": "Доступ к сервису через localhost:8080",
+        "tip": "kubectl cp pod-name:/путь ./локальный — из пода. kubectl cp ./локальный pod-name:/путь — в под. kubectl port-forward svc/имя 8080:80 — проброс порта.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "kubectl get events --sort-by='.lastTimestamp'",
+        "desc": "События кластера (debug)",
+        "hint": "Полезно когда под не запускается!",
+        "tip": "kubectl get events --sort-by='.lastTimestamp' — события кластера по времени. kubectl get events -n namespace — события namespace. Полезно для отладки!",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "ansible",
+    "title": "🤖 Ansible",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "ansible-playbook playbook.yml",
+        "desc": "Запустить Ansible playbook",
+        "hint": "--check = dry-run, --diff = показать изменения",
+        "tip": "ansible-playbook playbook.yml — запустить playbook. ansible-playbook playbook.yml -i inventory — свой inventory. ansible-playbook playbook.yml --check — dry-run. ansible-playbook playbook.yml --diff — показать изменения.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "ansible all -m ping",
+        "desc": "Проверить связь (ping)",
+        "hint": "-m setup = собрать все факты о хостах",
+        "tip": "ansible all -m ping — проверить связь со всеми хостами. ansible all -m setup — собрать факты. ansible group -a 'команда' — выполнить команду на группе.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "ansible all -a \"uptime\"",
+        "desc": "Выполнить команду на всех хостах",
+        "hint": "-m shell = shell, -m apt = пакетный менеджер",
+        "tip": "ansible all -m shell -a 'apt update' — выполнить shell команду. ansible all -m apt -a 'name=nginx state=present' — модуль apt. ansible all -m copy -a 'src=файл dest=/путь' — копировать.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "ansible-vault encrypt файл.yml",
+        "desc": "Шифрование секретов (Vault)",
+        "hint": "--vault-password-file = файл с паролем",
+        "tip": "ansible-vault encrypt файл.yml — зашифровать. ansible-vault decrypt файл.yml — расшифровать. ansible-vault edit файл.yml — редактировать. ansible-playbook -i inventory --vault-password-file файл playbook.yml — запустить с vault.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "ansible-playbook playbook.yml -vvv",
+        "desc": "Подробный вывод (debug)",
+        "hint": "-vvv = максимум деталей для отладки",
+        "tip": "ansible-playbook playbook.yml --limit группа — запустить только для группы. --tags ",
+        "risk": "caution"
+      },
+      {
+        "cmd": "inventory",
+        "desc": "Inventory файл (хосты и группы)",
+        "hint": "Можно INI или YAML формат",
+        "tip": "inventory: [webservers] → host1 host2. [dbservers] → db1. [all:vars] → ansible_user=root ansible_ssh_private_key_file=~/.ssh/key. Можно YAML формат.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "cicd-deploy",
+    "title": "🚀 CI/CD и Деплой",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "scp + ssh deploy",
+        "desc": "Простой деплой через SSH",
+        "hint": "scp → распаковка → restart сервиса",
+        "tip": "scp deploy.tar.gz user@server:/tmp/ && ssh user@server 'tar xzf /tmp/deploy.tar.gz -C /var/www/app && systemctl restart app' — типичный деплой скрипт.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "rsync -avz --delete ./ user@server:/path/",
+        "desc": "Деплой через rsync (синхронизация)",
+        "hint": "--delete = удалить на сервере то, чего нет локально",
+        "tip": "rsync -avz --delete --exclude='.git' --exclude='node_modules' ./ user@server:/var/www/app/ — синхронизация с удалением лишних файлов. --exclude исключить папки.",
+        "risk": "danger"
+      },
+      {
+        "cmd": "docker push registry/образ:тег",
+        "desc": "Push образа в Docker registry",
+        "hint": "Используй Docker Hub, GHCR, GitLab Registry",
+        "tip": "docker build -t registry/app:tag . && docker push registry/app:tag — собрать и отправить в registry. На сервере: docker pull registry/app:tag && docker compose up -d (Compose v2).",
+        "risk": "caution"
+      },
+      {
+        "cmd": "kubectl set image deploy/имя контейнер=образ:v2",
+        "desc": "K8s: обновить образ в deployment",
+        "hint": "rollout undo = быстрый откат",
+        "tip": "kubectl set image deploy/имя контейнер=образ:новый-тег — обновить образ. kubectl rollout status deploy/имя — ждать завершения. kubectl rollout undo deploy/имя — откат.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "helm upgrade имя ./chart",
+        "desc": "Helm: обновить релиз",
+        "hint": "rollback имя 1 = откат к ревизии 1",
+        "tip": "helm install имя ./chart — установить. helm upgrade имя ./chart — обновить. helm rollback имя 1 — откатить к ревизии 1. helm list — список. helm status имя — статус.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "terraform plan -out=tfplan && terraform apply tfplan",
+        "desc": "Terraform: сохранённый план и применение",
+        "hint": "В CI проверяй plan перед apply; state хранит секреты",
+        "tip": "Сохрани проверенный план в бинарный файл и применяй именно его: terraform plan -out=tfplan, затем terraform apply tfplan. Не коммить tfplan и state: они могут содержать секреты.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "make deploy",
+        "desc": "Makefile: стандартизация команд",
+        "hint": "make help = список доступных команд",
+        "tip": "make build — собрать. make test — тесты. make deploy — деплой. Makefile стандартизирует процесс. phony: build test deploy — цели не файлы.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "monitoring",
+    "title": "📊 Мониторинг и алертинг",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "vmstat 2",
+        "desc": "Системная статистика (каждые 2с)",
+        "hint": "iostat 2 = дисковый I/O, mpstat = CPU по ядрам",
+        "tip": "vmstat 2 — статистика каждые 2 сек: procs, memory, swap, io, system, cpu. iostat 2 — I/O статистика. mpstat — CPU по ядрам.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "iotop",
+        "desc": "Мониторинг I/O по процессам",
+        "hint": "nethogs = сеть по процессам, iftop = по соединениям",
+        "tip": "sudo iotop — мониторинг I/O по процессам (требует sudo!). nethogs — сетевой трафик по процессам. iftop — сетевой трафик по соединениям. bmon — bandwidth monitor.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "docker stats",
+        "desc": "Статистика контейнеров в реальном времени",
+        "hint": "--no-stream = один снимок",
+        "tip": "docker stats — статистика контейнеров (CPU, RAM, сеть, диск). docker stats --no-stream — один раз (не continuously). docker stats --format 'table {{.Name}}\\t{{.CPUPerc}}\\t{{.MemUsage}}'.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "curl localhost:9090/metrics",
+        "desc": "Проверить health/metrics endpoint",
+        "hint": "Используй в мониторинге и алертинге",
+        "tip": "curl http://localhost:9090/metrics — Prometheus метрики. curl http://localhost:3000/api/health — health check. wget -qO- http://localhost:80/health — health check.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "crontab -e",
+        "desc": "Редактировать Cron задачи",
+        "hint": "*/5 * * * * = каждые 5 минут",
+        "tip": "crontab -l — список задач. crontab -e — редактировать. Формат: минута час день месяц день-недели команда. */5 * * * * = каждые 5 мин. 0 3 * * * = каждый день в 3:00.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "systemctl status cron",
+        "desc": "Статус Cron сервиса",
+        "hint": "journalctl -u cron = логи cron",
+        "tip": "systemctl status cron — статус cron. journalctl -u cron — логи cron. grep CRON /var/log/syslog — альтернативный просмотр логов cron.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "text-editors",
+    "title": "✏️ Текстовые редакторы",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "nano файл",
+        "desc": "Простой редактор (для новичков)",
+        "hint": "Ctrl+O=сохранить, Ctrl+X=выйти, Ctrl+W=поиск",
+        "tip": "nano файл — простой редактор. Ctrl+O = сохранить, Ctrl+X = выйти, Ctrl+W = поиск, Ctrl+K = вырезать строку, Ctrl+U = вставить. Ctrl+G = помощь.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "vim файл",
+        "desc": "Vim (мощный редактор)",
+        "hint": "i=вставка, Esc=норм.режим, :wq=сохранить+выйти",
+        "tip": "vim файл — мощный редактор. i = вставка, Esc = нормальный режим. :w = сохранить, :q = выйти, :wq = сохранить+выйти, :q! = выйти без сохранения.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sed -i 's/старое/новое/g' файл",
+        "desc": "sed: замена текста в файле",
+        "hint": "-i = заменить в файле (inplace)",
+        "tip": "sed 's/старое/новое/g' файл — замена текста. sed -i 's/старое/новое/g' файл — замена inplace (в файле). sed -n '10,20p' файл — строки 10-20.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "awk '{print $1}' файл",
+        "desc": "awk: обработка текста по полям",
+        "hint": "-F: = разделитель :, END = после обработки",
+        "tip": "awk '{print $1}' файл — вывести первое поле. awk -F: '{print $1}' /etc/passwd — разделитель :. awk '{sum+=$1} END {print sum}' — сумма колонки.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sort файл | uniq -c",
+        "desc": "Сортировка + подсчёт дубликатов",
+        "hint": "uniq работает только после sort!",
+        "tip": "sort файл — сортировка строк. sort -n файл — числовая. sort -r файл — обратная. uniq файл — убрать дубликаты (нужен sorted input). sort файл | uniq -c — посчитать дубли.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "wc -l файл",
+        "desc": "Посчитать строки/слова/байты",
+        "hint": "-l=строки, -w=слова, -c=байты",
+        "tip": "wc -l файл — строки. wc -w файл — слова. wc -c файл — байты. wc -m файл — символы. cat файл | wc -l — посчитать строки вывода.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "head -20 файл",
+        "desc": "Первые строки файла",
+        "hint": "tail -f = следить в реальном времени",
+        "tip": "head -20 файл — первые 20 строк. tail -20 файл — последние 20. tail -f файл — следить. head -n -5 файл — всё кроме последних 5 строк.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "cut -d: -f1 /etc/passwd",
+        "desc": "Вырезать колонки из текста",
+        "hint": "-d=разделитель, -f=поля",
+        "tip": "cut -d: -f1 файл — первое поле с разделителем :. cut -c1-10 файл — символы 1-10. cut -f2,3 файл — поля 2 и 3 (tab разделитель).",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "env-vars",
+    "title": "🔧 Переменные окружения",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "env | grep переменная",
+        "desc": "Найти переменную окружения",
+        "hint": "printenv PATH = конкретная переменная",
+        "tip": "env — все переменные окружения. printenv — аналог. printenv PATH — конкретная переменная. echo $HOME — вывод переменной. env | grep PATH — поиск.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "export ИМЯ=значение",
+        "desc": "Установить переменную (сессия)",
+        "hint": "export PATH=$PATH:/путь — добавить в PATH",
+        "tip": "export ИМЯ=значение — установить переменную (текущая сессия). export PATH=$PATH:/новый/путь — добавить в PATH. export — без аргументов = список export-переменных.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "source ~/.bashrc",
+        "desc": "Перечитать ~/.bashrc",
+        "hint": ".bashrc = каждый терминал, .profile = login shell",
+        "tip": "~/.bashrc — выполняется при каждом открытии терминала. ~/.bash_profile или ~/.profile — при login shell. source ~/.bashrc — перечитать без перезапуска.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "/etc/environment",
+        "desc": "Системные переменные (все пользователи)",
+        "hint": "systemctl set-environment = для сервисов",
+        "tip": "/etc/environment — системные переменные (для всех пользователей). /etc/profile.d/*.sh — скрипты при login. systemctl set-environment — для systemd сервисов.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "alias ll='ls -la'",
+        "desc": "Создать алиас (сокращение команды)",
+        "hint": "Добавь в ~/.bashrc для постоянного хранения",
+        "tip": "alias ll='ls -la' — создать алиас. alias — список алиасов. unalias ll — удалить. Алиасы в ~/.bashrc для постоянного хранения.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "echo $?",
+        "desc": "Код выхода последней команды",
+        "hint": "0 = успех, 1+ = ошибка",
+        "tip": "$? — код выхода последней команды (0 = успех, !=0 = ошибка). $_ — последний аргумент предыдущей команды. $! — PID последнего фонового процесса.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "utilities",
+    "title": "🛠️ Полезные утилиты",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "find ./logs -type f -name \"*.log\" -print0 | xargs -0 -r rm -i",
+        "desc": "Безопасно передать файлы в xargs",
+        "hint": "Сначала замени rm -i на printf '%s\\n' для проверки",
+        "tip": "Сначала выведи кандидатов и только затем удаляй. NUL-разделители защищают имена с пробелами/переводами строк: find . -type f -name '*.log' -print0 | xargs -0 -r rm -i. Лучше ограничивай путь и используй -i для ручной очистки.",
+        "risk": "danger"
+      },
+      {
+        "cmd": "команда | tee лог.txt",
+        "desc": "Вывод + запись в файл",
+        "hint": "-a = добавить (append), без -a = перезаписать",
+        "tip": "tee файл — вывод + запись в файл. echo 'hello' | tee файл. tee -a файл — добавить (append). useful: команда | tee лог.txt — и вывод, и лог.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "date '+%Y-%m-%d_%H-%M-%S'",
+        "desc": "Форматированная дата/время",
+        "hint": "date -d 'yesterday' = вчера",
+        "tip": "date — текущая дата/время. date '+%Y-%m-%d_%H-%M-%S' — форматированная. date -d 'yesterday' — вчера. date -d '+7 days' — через 7 дней.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "echo 'текст' | base64",
+        "desc": "Base64 кодирование",
+        "hint": "base64 -d = декодировать",
+        "tip": "base64 файл — закодировать. base64 -d файл — декодировать. echo 'текст' | base64 — encode строки. echo 'код' | base64 -d — decode.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "openssl rand -base64 32",
+        "desc": "Сгенерировать случайную строку",
+        "hint": "Полезно для паролей, secret key",
+        "tip": "openssl rand -base64 32 — сгенерировать случайную строку. openssl passwd -6 — хеш пароля. openssl req -x509 ... — создать self-signed SSL сертификат.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "cat файл.json | jq .",
+        "desc": "Парсить и форматировать JSON",
+        "hint": "-r = raw вывод (без кавычек)",
+        "tip": "jq '.[]' файл.json — парсить JSON. curl ... | jq . — форматировать JSON. jq '.name' файл.json — поле name. jq -r '.name' — raw вывод (без кавычек).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "timeout 10 команда",
+        "desc": "Ограничить время выполнения",
+        "hint": "--signal=KILL = гарантированно убить",
+        "tip": "timeout 10 команда — убить команду через 10 секунд. timeout --signal=KILL 10 команда — гарантированно убить. Полезно для зависающих команд.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "screen -S имя",
+        "desc": "Screen (альтернатива tmux)",
+        "hint": "Ctrl+A, D = отключиться, процесс жив!",
+        "tip": "screen -S имя — создать сессию. Ctrl+A, D — отключиться. screen -r имя — вернуться. screen -ls — список. screen -X -S имя quit — убить сессию.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "system-kernel",
+    "title": "🖥️ Система и ядро",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "uname -a",
+        "desc": "Информация о системе и ядре",
+        "hint": "-r = версия ядра, -m = архитектура",
+        "tip": "uname -a — полная информация (ядро, архитектура, hostname). uname -r — только версия ядра. uname -m — архитектура (x86_64, aarch64). uname -n — hostname.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "lscpu",
+        "desc": "Информация о CPU",
+        "hint": "lsmem = память, lspci = PCI, lsusb = USB",
+        "tip": "lscpu — информация о CPU (ядра, потоки, модель). lsmem — память. lsusb — USB устройства. lspci — PCI устройства. lsblk — блочные устройства.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "cat /proc/loadavg",
+        "desc": "Load Average из /proc",
+        "hint": "/proc = виртуальная ФС с инфо о системе",
+        "tip": "cat /proc/cpuinfo — детальная инфа о CPU. cat /proc/meminfo — память. cat /proc/version — версия ядра. cat /proc/loadavg — load average.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo sysctl -p",
+        "desc": "Применить sysctl.conf",
+        "hint": "sysctl -w параметр=значение = установить",
+        "tip": "sudo sysctl -p — применить /etc/sysctl.conf. sudo sysctl -w net.ipv4.ip_forward=1 — включить форвардинг. sysctl -a — все параметры.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo update-alternatives --config editor",
+        "desc": "Выбрать программу по умолчанию",
+        "hint": "--list = показать все варианты",
+        "tip": "sudo update-alternatives --config editor — выбрать редактор по умолчанию. update-alternatives --config python3 — выбрать Python. update-alternatives --list имя — все варианты.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo timedatectl set-timezone Europe/Moscow",
+        "desc": "Часовой пояс и время",
+        "hint": "set-ntp true = авто-синхронизация",
+        "tip": "sudo timedatectl — статус времени. sudo timedatectl set-timezone Europe/Moscow — часовой пояс. sudo timedatectl set-ntp true — синхронизация через NTP.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo update-locale LANG=ru_RU.UTF-8",
+        "desc": "Язык системы (локаль)",
+        "hint": "locale -a = список доступных локалей",
+        "tip": "sudo locale-gen — сгенерировать локали из /etc/locale.gen. update-locale LANG=ru_RU.UTF-8 — язык системы. localectl — статус локалей.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "cat /etc/os-release",
+        "desc": "Информация о дистрибутиве",
+        "hint": "hostnamectl = hostname + система",
+        "tip": "cat /etc/os-release — информация о дистрибутиве (Debian версия, NAME, VERSION_ID). hostnamectl — hostname и инфо о системе. lsb_release -a — аналог.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo apt install linux-headers-$(uname -r)",
+        "desc": "Заголовки ядра (для драйверов)",
+        "hint": "Нужны для VirtualBox, NVIDIA, DKMS модулей",
+        "tip": "sudo apt install linux-headers-$(uname -r) — заголовки ядра (нужны для драйверов, VirtualBox, Docker). dkms — Dynamic Kernel Module Support.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo update-grub",
+        "desc": "Обновить GRUB загрузчик",
+        "hint": "/etc/default/grub = конфиг GRUB",
+        "tip": "sudo grub-mkconfig -o /boot/grub/grub.cfg — обновить GRUB конфиг (для других дистрибутивов: update-grub). Редактировать /etc/default/grub.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "bash-scripts",
+    "title": "📝 Bash скрипты",
+    "tags": [],
+    "rows": [
+      {
+        "cmd": "#!/bin/bash",
+        "desc": "Shebang (первая строка скрипта)",
+        "hint": "chmod +x скрипт.sh = сделать исполняемым",
+        "tip": "#!/bin/bash — shebang (указывает интерпретатор). chmod +x скрипт.sh — сделать исполняемым. ./скрипт.sh — запустить. bash скрипт.sh — запустить через bash.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "set -euo pipefail",
+        "desc": "Строгий режим Bash (best practice)",
+        "hint": "-e=error exit, -u=undefined error, -o pipefail=pipe errors",
+        "tip": "set -e — exit при ошибке. set -x — выводить каждую команду (debug). set -euo pipefail — строгий режим. set -u — ошибка при использовании неопределённых переменных.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "if [ -f \"/etc/nginx/nginx.conf\" ]; then",
+        "desc": "Условие if (проверка файла)",
+        "hint": "-f=файл, -d=директория, -z=пустая строка",
+        "tip": "if [ условие ]; then ... elif [ условие ]; then ... else ... fi. [[ ]] — расширенный тест. [ -f файл ] = файл существует. [ -d папка ] = директория. [ -z ",
+        "risk": "safe"
+      },
+      {
+        "cmd": "for файл in *.log; do echo \"$файл\"; done",
+        "desc": "Цикл for по файлам",
+        "hint": "for i in {1..10} = цикл от 1 до 10",
+        "tip": "for файл in *.txt; do echo ",
+        "risk": "safe"
+      },
+      {
+        "cmd": "#!/bin/bash\\n# $1 = первый аргумент",
+        "desc": "Аргументы скрипта",
+        "hint": "$# = кол-во, $@ = все, \"$@\" = с пробелами",
+        "tip": "$1, $2, ... — аргументы скрипта. $# — количество аргументов. $@ — все аргументы. ",
+        "risk": "safe"
+      },
+      {
+        "cmd": "case $1 in\\n  start) ... ;;\\n  stop) ... ;;\\nesac",
+        "desc": "Case (выбор по значению)",
+        "hint": "Удобнее множества if/elif",
+        "tip": "case $переменная in паттерн1) команды;; паттерн2) команды;; *) команды по умолчанию;; esac. Удобнее чем множество if/elif.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "команда > вывод.log 2>&1",
+        "desc": "Перенаправление вывода",
+        "hint": "2>&1 = stderr в stdout, >> = добавить",
+        "tip": "команда > файл — перенаправить stdout (перезаписать). команда >> файл — добавить. команда 2> файл — stderr. команда > файл 2>&1 — stdout+stderr в один файл.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "my_function() {\\n  local var=\"hello\"\\n  echo $var\\n}",
+        "desc": "Функция в Bash",
+        "hint": "local = локальная переменная, return = код выхода",
+        "tip": "function имя() { команды; } или имя() { команды; }. local переменная — локальная в функции. return 0 — код выхода функции.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "debian-repositories",
+    "title": "📦 Debian: репозитории и восстановление пакетов",
+    "tags": [
+      "apt",
+      "репозитории",
+      "deb822",
+      "keyring",
+      "pinning",
+      "backports",
+      "dpkg"
+    ],
+    "rows": [
+      {
+        "cmd": "apt-cache policy пакет",
+        "desc": "Версии и приоритеты APT",
+        "hint": "Проверяй перед pinning и установкой из backports",
+        "tip": "Показывает источники и приоритеты версий для пакета. Это первая проверка, если apt выбирает неожиданную версию.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "grep -R '^URIs:\\|^Suites:' /etc/apt/sources.list.d/",
+        "desc": "Проверить deb822-источники",
+        "hint": "Не добавляй Ubuntu PPA в Debian",
+        "tip": "deb822 — современный формат источников APT. Файлы обычно лежат в /etc/apt/sources.list.d/*.sources; apt modernize-sources помогает миграции существующих записей.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo install -d -m 0755 /etc/apt/keyrings",
+        "desc": "Подготовить каталог keyring",
+        "hint": "Скачивай ключ только с сайта поставщика и проверяй fingerprint",
+        "tip": "Ключ стороннего репозитория должен быть отдельным файлом в /etc/apt/keyrings и указан через Signed-By в .sources. Не используй устаревший apt-key.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo apt -t bookworm-backports install пакет",
+        "desc": "Установить пакет из backports",
+        "hint": "Замени bookworm на свой stable-релиз",
+        "tip": "Скачивает выбранный пакет из backports. Указывай релиз явно: так backports не станут источником всех пакетов по умолчанию.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudoedit /etc/apt/preferences.d/пакет.pref",
+        "desc": "Создать правило APT pinning",
+        "hint": "Сначала проверь policy и симуляцию",
+        "tip": "Файл preferences.d задаёт приоритеты источников. Ошибка pinning способна подтянуть целый чужой релиз — документируй правило и сначала смотри apt-cache policy.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "apt-mark showhold",
+        "desc": "Показать удержанные пакеты",
+        "hint": "Hold может блокировать обновления безопасности",
+        "tip": "Показывает пакеты, удержанные от обновления. apt-mark hold пакет удерживает версию, unhold снимает удержание; это временная мера, которую нужно отслеживать.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo dpkg --configure -a",
+        "desc": "Восстановить прерванную настройку dpkg",
+        "hint": "Следующий шаг при необходимости: sudo apt -f install",
+        "tip": "Если dpkg был прерван, сначала завершите настройку распакованных пакетов. Затем apt -f install устранит недостающие зависимости. Читайте вывод, не удаляйте lock-файлы вручную.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo debsums -s",
+        "desc": "Найти изменённые файлы пакетов",
+        "hint": "Конфиги в /etc часто намеренно отличаются",
+        "tip": "Проверяет целостность файлов, установленных пакетами, по базе debsums. Утилита не установлена по умолчанию: sudo apt install debsums.",
+        "risk": "safe"
+      }
+    ],
+    "description": "Меняйте источники только по документации Debian или поставщика ПО. Перед обновлением production-системы сохраняйте план изменений."
+  },
+  {
+    "id": "unattended-upgrades",
+    "title": "🔐 Автообновления и сопровождение",
+    "tags": [
+      "unattended",
+      "upgrades",
+      "security",
+      "updates",
+      "apt"
+    ],
+    "rows": [
+      {
+        "cmd": "sudo apt install unattended-upgrades",
+        "desc": "Установить автообновления безопасности",
+        "hint": "Настрой перед включением на production",
+        "tip": "Устанавливает механизм автоматической установки разрешённых обновлений. После установки проверьте policy в /etc/apt/apt.conf.d/50unattended-upgrades, особенно origin и reboot.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo unattended-upgrade --dry-run --debug",
+        "desc": "Проверить автообновления без установки",
+        "hint": "Безопасная проверка policy",
+        "tip": "Запускает проверку unattended-upgrades в отладочном режиме и показывает, какие обновления были бы установлены.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "systemctl list-timers 'apt-*'",
+        "desc": "Проверить расписание APT-задач",
+        "hint": "Не путай с гарантией успешной установки",
+        "tip": "Показывает systemd timers, которые запускают apt update и unattended upgrades. Логи также доступны через journalctl -u apt-daily-upgrade.service.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "apt list --upgradable",
+        "desc": "Проверить ожидающие обновления",
+        "hint": "Симуляция: apt-get -s upgrade",
+        "tip": "Показывает список ожидающих обновлений. Перед массовым обновлением используй apt-get -s upgrade для симуляции изменений.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo needrestart",
+        "desc": "Найти процессы, которым нужен restart",
+        "hint": "Установи пакет needrestart при необходимости",
+        "tip": "Нужен перезапуск показывает процессы, использующие уже заменённые библиотеки. Это подсказка, а не замена проверки приложения после релиза.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "diagnostics-cpu-mem-io-boot",
+    "title": "🩺 Диагностика: CPU, память, I/O и загрузка",
+    "tags": [
+      "troubleshooting",
+      "cpu",
+      "ram",
+      "memory",
+      "io",
+      "disk",
+      "network",
+      "dns",
+      "boot",
+      "oom"
+    ],
+    "rows": [
+      {
+        "cmd": "top -o %CPU",
+        "desc": "Быстро увидеть нагрузку CPU",
+        "hint": "q = выход; htop удобнее, если установлен",
+        "tip": "Показывает число CPU, load average, RAM и задачи. Нагрузка выше числа CPU — повод проверить run queue и I/O, но не самостоятельный диагноз.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "vmstat 1 10",
+        "desc": "CPU, swap и ожидание I/O во времени",
+        "hint": "Нужны 10 последовательных измерений",
+        "tip": "vmstat раз в секунду: r — очередь CPU, si/so — swap in/out, wa — ожидание I/O. Наблюдай несколько интервалов, а не одну строку.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "pidstat -d 1",
+        "desc": "Процессы с активным I/O",
+        "hint": "Установи sysstat, если команды нет",
+        "tip": "pidstat показывает CPU, RAM или I/O по процессам. Пакет sysstat может потребовать установки; -d включает I/O.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "iostat -xz 1",
+        "desc": "Задержки и загрузка дисков",
+        "hint": "Пакет sysstat; сравни несколько интервалов",
+        "tip": "iostat -xz показывает расширенную статистику устройств. Высокие await/util при нагрузке — сигнал изучить диск и очередь, а не немедленно менять параметры.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "journalctl -k -b | grep -iE 'oom|out of memory|killed process'",
+        "desc": "Проверить OOM-убийства",
+        "hint": "После OOM проверь лимиты cgroup и memory leak",
+        "tip": "Ядро пишет сообщения OOM killer в journal. -k ограничивает вывод ядром; -b — только текущая загрузка.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "systemd-analyze critical-chain",
+        "desc": "Найти задержки загрузки",
+        "hint": "blame = список, critical-chain = зависимый путь",
+        "tip": "systemd-analyze blame ранжирует units по времени старта. Не все units блокируют загрузку, поэтому подтверждай критический путь командой critical-chain.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "journalctl -k -p warning..alert -b",
+        "desc": "Предупреждения ядра после boot",
+        "hint": "Ищи также ошибки драйверов и ФС",
+        "tip": "Показывает ошибки ядра текущей/предыдущей загрузки. dmesg может быть ограничен настройкой kernel.dmesg_restrict; journalctl -k — альтернатива.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "network-dns-firewall",
+    "title": "🌐 Сеть, DNS и firewall",
+    "tags": [
+      "network",
+      "dns",
+      "socket",
+      "route",
+      "nftables",
+      "firewall"
+    ],
+    "rows": [
+      {
+        "cmd": "resolvectl status",
+        "desc": "Диагностика DNS-конфигурации",
+        "hint": "Команда доступна при systemd-resolved",
+        "tip": "Показывает IP, маршруты и DNS-серверы, видимые systemd-resolved. Если resolved не используется, проверь /etc/resolv.conf и менеджер сети.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "dig @1.1.1.1 example.com A +short",
+        "desc": "Проверить DNS-запрос к resolver",
+        "hint": "Пакет dnsutils; сравни с обычным dig",
+        "tip": "Запрашивает конкретный DNS-сервер и показывает ответ без кэша приложения. Замените 1.1.1.1 на корпоративный resolver при диагностике.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo ss -lntup",
+        "desc": "Кто слушает порты",
+        "hint": "Проверяй перед открытием порта в firewall",
+        "tip": "ss — современная замена netstat. -lntup показывает слушающие TCP/UDP сокеты и процессы (для PID нужны права root).",
+        "risk": "safe"
+      },
+      {
+        "cmd": "ip route get 1.1.1.1",
+        "desc": "Проверить фактический маршрут",
+        "hint": "Покажет интерфейс и source IP",
+        "tip": "Проверяет маршрут ядра к адресу с учётом policy routing. Полезнее, чем просто ip route, при нескольких интерфейсах или VPN.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo nft list ruleset",
+        "desc": "Показать правила nftables",
+        "hint": "Проверка безопасна; изменение правил может отрезать SSH",
+        "tip": "nft list ruleset выводит текущие правила nftables. Сначала делайте backup вывода и держите отдельную SSH-сессию, чтобы не потерять доступ.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo nft -c -f /etc/nftables.conf",
+        "desc": "Проверить конфиг nftables",
+        "hint": "-c не меняет правила",
+        "tip": "Проверяет синтаксис файла конфигурации nftables без применения. После проверки применяйте осознанно через systemctl reload nftables.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo tcpdump -ni eth0 'port 53'",
+        "desc": "Посмотреть DNS-трафик интерфейса",
+        "hint": "Ctrl+C; замени eth0 на реальный интерфейс",
+        "tip": "tcpdump захватывает пакеты. Ограничивайте захват фильтром и не сохраняйте чувствительный трафик без необходимости.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "security-apparmor",
+    "title": "🛡️ Безопасность и AppArmor",
+    "tags": [
+      "security",
+      "apparmor",
+      "ssh",
+      "permissions",
+      "audit",
+      "capabilities"
+    ],
+    "rows": [
+      {
+        "cmd": "sudo aa-status",
+        "desc": "Статус профилей AppArmor",
+        "hint": "Enforce блокирует, complain только журналирует",
+        "tip": "aa-status показывает загруженные профили AppArmor и режим enforce/complain. Если утилиты нет, установите apparmor-utils.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "journalctl -k -b | grep -i apparmor",
+        "desc": "Найти блокировки AppArmor",
+        "hint": "Сопоставь denial с нужной операцией приложения",
+        "tip": "Ищет отказы AppArmor в журнале текущей загрузки. Исправляйте профиль минимальным разрешением, не отключая AppArmor глобально.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "getcap -r /usr/local/bin 2>/dev/null",
+        "desc": "Проверить capabilities файлов",
+        "hint": "setcap меняет привилегии — применяй только осознанно",
+        "tip": "Показывает Linux capabilities файлов. Capabilities уменьшают потребность в full root, но требуют отдельного аудита и документирования.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo sshd -t",
+        "desc": "Проверить конфиг SSH",
+        "hint": "После проверки: systemctl reload ssh",
+        "tip": "Проверяет конфигурацию sshd до reload/restart. Никогда не перезапускайте SSH с непроверенным конфигом и держите вторую сессию.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "last -a | head -30",
+        "desc": "Посмотреть последние SSH/console входы",
+        "hint": "lastb — неудачные попытки, если ведётся btmp",
+        "tip": "Показывает последние входы из базы wtmp. Это не полный аудит безопасности, но полезно для первичной проверки доступа.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo auditctl -s",
+        "desc": "Статус Linux Audit",
+        "hint": "Пакет auditd; rules могут создавать много событий",
+        "tip": "auditctl -s показывает состояние Linux Audit. Для постоянных правил используйте /etc/audit/rules.d, тестируйте на стенде и контролируйте объём логов.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "storage-lvm-smart-swap-fs",
+    "title": "💽 Хранилища: LVM, SMART, swap и ФС",
+    "tags": [
+      "storage",
+      "lvm",
+      "smart",
+      "swap",
+      "fsck",
+      "filesystem",
+      "mount"
+    ],
+    "rows": [
+      {
+        "cmd": "lsblk -o NAME,SIZE,FSTYPE,UUID,MOUNTPOINTS",
+        "desc": "Карта дисков и файловых систем",
+        "hint": "Безопасная первая команда перед любыми изменениями",
+        "tip": "lsblk с этими столбцами даёт удобную карту дисков, UUID, ФС и точек монтирования. Всегда идентифицируй устройство по размеру/UUID, а не только /dev/sdX.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo lvs -a -o +devices",
+        "desc": "Показать LVM и устройства",
+        "hint": "Изменение размера требует отдельного плана и backup",
+        "tip": "pvs, vgs и lvs показывают физические тома, группы и логические тома LVM. Добавь -o +devices к lvs, чтобы увидеть underlying devices.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo smartctl -a /dev/sdX",
+        "desc": "Проверить здоровье диска SMART",
+        "hint": "Пакет smartmontools; nvme используй /dev/nvme0",
+        "tip": "smartctl -a читает SMART-атрибуты и результаты тестов. Критичны reallocated/pending sectors и ошибки; интерпретируй по модели диска и тренду.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo smartctl -t short /dev/sdX",
+        "desc": "Запустить короткий SMART-тест",
+        "hint": "Не заменяет резервное копирование",
+        "tip": "Запускает короткий SMART self-test в фоне. Через несколько минут посмотри результат smartctl -l selftest /dev/sdX. Нагрузочный long test планируй отдельно.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "swapon --show",
+        "desc": "Проверить активный swap",
+        "hint": "Увеличение swap не лечит утечки памяти",
+        "tip": "swapon --show показывает активный swap, free -h — общую картину памяти. Постоянный swapfile требует записи в fstab и проверки после reboot.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo fsck -N /dev/sdX1",
+        "desc": "Предпросмотр fsck",
+        "hint": "Не запускай исправление на смонтированной ФС",
+        "tip": "fsck -N покажет, что было бы сделано, без запуска проверки. Полный fsck нельзя запускать на смонтированной файловой системе: загружайтесь в rescue или размонтируйте раздел.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "findmnt -T /путь",
+        "desc": "Проверить, как смонтирован путь",
+        "hint": "Покажет реальное устройство и опции",
+        "tip": "findmnt показывает источник, тип и опции конкретной точки монтирования. Полезно перед изменением fstab или расследованием read-only mount.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "backup-restore",
+    "title": "🧰 Резервное копирование и восстановление",
+    "tags": [
+      "backup",
+      "restic",
+      "borg",
+      "restore",
+      "snapshot",
+      "rsync"
+    ],
+    "rows": [
+      {
+        "cmd": "restic snapshots",
+        "desc": "Список backup-снимков Restic",
+        "hint": "Проверь, что репозиторий и ключ доступны при аварии",
+        "tip": "restic snapshots показывает точки восстановления в репозитории. Перед автоматизацией установите RESTIC_REPOSITORY и передавайте пароль через защищённый механизм, не в shell history.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "restic check",
+        "desc": "Проверить целостность Restic backup",
+        "hint": "Планируй проверку отдельно от backup",
+        "tip": "Проверяет данные и структуру репозитория Restic. --read-data можно запускать периодически для чтения части или всех блоков; это может быть долго и дорого для удалённого storage.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "restic restore latest --target ./restore-test",
+        "desc": "Тестовое восстановление Restic",
+        "hint": "Сверь файлы и запусти приложение/проверку данных",
+        "tip": "Восстанавливает выбранный snapshot в новую пустую папку. Не восстанавливайте поверх production-пути без отдельного плана отката.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "borg list ssh://user@host/./repo",
+        "desc": "Список архивов Borg",
+        "hint": "URL и ключ должны быть доступны для восстановления",
+        "tip": "borg list показывает архивы в репозитории. Borg дедуплицирует данные на стороне клиента; защищайте ключ и регулярно запускайте borg check.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "rsync -aHAX --dry-run /source/ /backup/source/",
+        "desc": "Предпросмотр синхронизации rsync",
+        "hint": "Проверь вывод до добавления --delete",
+        "tip": "rsync -aHAX сохраняет большинство метаданных; --dry-run показывает изменения без копирования. Это синхронизация, а не полноценный versioned backup без snapshot/хранения версий.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "rsync -aHAX --delete --dry-run /source/ /backup/source/",
+        "desc": "Проверить зеркальное удаление rsync",
+        "hint": "Опасно без дополнительной версии backup",
+        "tip": "--delete зеркалирует удаление источника и может уничтожить единственную копию. Используйте только против отдельной backup-цели, после --dry-run и при наличии версий/snapshot.",
+        "risk": "safe"
+      }
+    ],
+    "description": "Backup считается рабочим только после тестового restore. Храни ключи, пароли и копии данных раздельно; применяй правило 3-2-1."
+  },
+  {
+    "id": "containers-compose-podman",
+    "title": "📦 Контейнеры: Compose, Podman и диагностика",
+    "tags": [
+      "docker",
+      "podman",
+      "containers",
+      "compose",
+      "rootless",
+      "logs",
+      "security"
+    ],
+    "rows": [
+      {
+        "cmd": "docker compose config --quiet",
+        "desc": "Проверить Compose-конфиг",
+        "hint": "Без вывода итоговой конфигурации и секретов",
+        "tip": "docker compose config рендерит итоговую конфигурацию, включая merge и подстановки переменных. Проверяйте её перед deploy, не выводя секреты в общие логи CI.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "docker inspect --format '{{.State.Health.Status}}' контейнер",
+        "desc": "Проверить health контейнера",
+        "hint": "Работает, если HEALTHCHECK задан в образе",
+        "tip": "docker inspect показывает состояние, mounts, сети и healthcheck. Формат позволяет вывести конкретное поле без огромного JSON.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "docker system df",
+        "desc": "Показать занимаемое Docker место",
+        "hint": "Сначала диагностика, затем точечная очистка",
+        "tip": "docker system df показывает, что занимает место. Не запускайте docker system prune -a без понимания, какие образы, кэши и stopped containers нужны для rollback.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "podman ps -a",
+        "desc": "Список контейнеров Podman",
+        "hint": "Rootless уменьшает последствия компрометации",
+        "tip": "podman может работать rootless и совместим с большей частью CLI Docker. podman ps -a показывает контейнеры текущего пользователя; root и user имеют разные хранилища.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "docker stats --no-stream контейнер",
+        "desc": "Проверить CPU/RAM контейнера",
+        "hint": "Сравни с лимитами и событиями OOM ядра",
+        "tip": "Показывает лимиты cgroup для контейнера. Лимиты памяти/CPU задавайте явно в compose/runtime и тестируйте реакцию приложения на OOM.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "database-backup-sessions-locks",
+    "title": "🗄️ БД: backup, сессии и блокировки",
+    "tags": [
+      "postgresql",
+      "mysql",
+      "mariadb",
+      "redis",
+      "database",
+      "backup",
+      "locks",
+      "sessions"
+    ],
+    "rows": [
+      {
+        "cmd": "pg_dump -Fc -d имя_бд -f backup.dump",
+        "desc": "Backup одной PostgreSQL БД",
+        "hint": "Тестируй pg_restore в отдельной БД",
+        "tip": "Создаёт PostgreSQL backup в custom-формате, удобном для выборочного pg_restore. Снимайте backup с учётом ролей, глобальных объектов и требований PITR для production.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "pg_restore -d test_restore backup.dump",
+        "desc": "Тестовое восстановление PostgreSQL",
+        "hint": "Проверка restore обязательна",
+        "tip": "Восстанавливает custom dump в новую базу. --clean удаляет объекты и опасен, если цель не изолирована; для теста создайте отдельную пустую БД.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo -u postgres psql -c \\\"SELECT pid, usename, state, now()-query_start AS age, query FROM pg_stat_activity WHERE state <> 'idle' ORDER BY age DESC;\\\"",
+        "desc": "Найти долгие запросы PostgreSQL",
+        "hint": "Сначала диагностика, затем точечные действия",
+        "tip": "Показывает активные PostgreSQL-сессии, их состояние и длительность запроса. Не завершайте PID без оценки владельца и транзакции.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo -u postgres psql -c \\\"SELECT locktype, mode, granted, pid FROM pg_locks ORDER BY granted, pid;\\\"",
+        "desc": "Посмотреть блокировки PostgreSQL",
+        "hint": "Нужна связка с запросами/транзакциями",
+        "tip": "Показывает блокировки PostgreSQL. Сопоставляйте blocked и blocking PID через pg_stat_activity, чтобы понять первопричину, а не только жертву блокировки.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "mariadb-dump --single-transaction имя_бд > backup.sql",
+        "desc": "Логический backup MariaDB/MySQL",
+        "hint": "Проверь restore на отдельном сервере",
+        "tip": "mariadb-dump создаёт логический backup. Для согласованного InnoDB backup используйте --single-transaction; он не покрывает все engine/DDL случаи.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "redis-cli INFO memory",
+        "desc": "Проверить память Redis",
+        "hint": "Не заменяет мониторинг latency и eviction",
+        "tip": "redis-cli INFO memory показывает memory use и ключевые показатели. Для production backup учитывайте persistence RDB/AOF, репликацию и проверенное восстановление.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "terminal-shell",
+    "title": "⌨️ Терминал и повседневная shell-работа",
+    "tags": [
+      "shell",
+      "terminal",
+      "bash",
+      "help",
+      "jobs",
+      "history",
+      "navigation"
+    ],
+    "rows": [
+      {
+        "cmd": "type -a команда",
+        "desc": "Понять, какая команда будет запущена",
+        "hint": "Надёжнее which для shell builtin и alias",
+        "tip": "Показывает, чем является команда: builtin, alias, функция или исполняемый файл. -a выводит все найденные варианты и помогает обнаружить alias или дубликаты в PATH.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "command -v команда",
+        "desc": "Найти исполняемый файл в PATH",
+        "hint": "Подходит для интерактивной shell и скриптов",
+        "tip": "POSIX-совместимый способ найти исполняемый файл в PATH. В скрипте используйте command -v команда >/dev/null 2>&1 перед вызовом необязательной утилиты.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "man -k \"network statistics\"",
+        "desc": "Найти подходящую команду по смыслу",
+        "hint": "Обновление индекса man: sudo mandb",
+        "tip": "man -k ищет по кратким описаниям man-страниц. Аналог — apropos. Полезно, когда известно действие, но забыто имя утилиты.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "jobs -l",
+        "desc": "Показать задачи текущего терминала",
+        "hint": "fg %1 — вернуть задачу, bg %1 — продолжить в фоне",
+        "tip": "jobs -l показывает фоновые и приостановленные задачи текущей shell вместе с PID. Задачи другой сессии здесь не отображаются.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "fg %1",
+        "desc": "Вернуть фоновую задачу в терминал",
+        "hint": "Используй номер job, а не PID",
+        "tip": "Возвращает job номер 1 на передний план. Номер берётся из jobs; Ctrl+Z приостанавливает процесс, после чего его можно продолжить через bg.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "disown -h %1",
+        "desc": "Не завершать job при закрытии shell",
+        "hint": "Для долгой службы лучше systemd",
+        "tip": "Помечает задачу так, чтобы shell не посылала ей SIGHUP при выходе. Это не полноценный supervisor: для сервисов используй systemd, для интерактивной работы — tmux.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "pushd /путь/к/проекту",
+        "desc": "Перейти в каталог с возможностью возврата",
+        "hint": "popd = вернуться, dirs -v = показать стек",
+        "tip": "pushd сохраняет текущую директорию в стеке и переходит в новую; popd возвращает назад, dirs -v показывает стек. Удобно при работе с несколькими каталогами.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "fc -ln -10",
+        "desc": "Компактная история текущей shell",
+        "hint": "Ctrl+R — интерактивный обратный поиск",
+        "tip": "Показывает последние десять команд без номеров. fc -e - позволяет выбрать и повторно выполнить команду, поэтому перед подтверждением внимательно проверь текст.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "printf '%q\\n' \"$переменная\"",
+        "desc": "Показать shell-экранирование значения",
+        "hint": "В скриптах почти всегда заключай \"$переменные\" в кавычки",
+        "tip": "printf %q выводит строку в форме, которую можно безопасно повторно передать Bash. Это помогает диагностировать пробелы и спецсимволы, но не заменяет правильное quoting переменных.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "http-tls-network",
+    "title": "🔬 HTTP, TLS и глубокая сетевая диагностика",
+    "tags": [
+      "http",
+      "https",
+      "tls",
+      "ssl",
+      "curl",
+      "openssl",
+      "dns",
+      "mtr",
+      "tcpdump",
+      "web"
+    ],
+    "rows": [
+      {
+        "cmd": "curl -fsS -o /dev/null -w 'code=%{http_code} dns=%{time_namelookup} connect=%{time_connect} ttfb=%{time_starttransfer} total=%{time_total}\\n' URL",
+        "desc": "Разложить задержку HTTP-запроса",
+        "hint": "Отличает DNS/TCP/TLS от медленного backend",
+        "tip": "Выполняет HTTP-запрос без тела ответа и печатает код, время DNS, соединения, первого байта и полное время. -f заставляет curl вернуть ошибку на HTTP 4xx/5xx.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "curl --resolve example.com:443:IP https://example.com/",
+        "desc": "Проверить HTTPS на конкретном IP",
+        "hint": "Не изменяет /etc/hosts и системный DNS",
+        "tip": "Подменяет DNS только для этого запроса, сохраняя Host и TLS SNI. Полезно для проверки нового сервера до переключения DNS.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "curl -v --connect-timeout 5 --max-time 20 URL",
+        "desc": "Подробная трассировка HTTP-соединения",
+        "hint": "Вывод может содержать чувствительные заголовки",
+        "tip": "-v показывает DNS, TCP, TLS и HTTP-заголовки; --connect-timeout ограничивает только установку соединения, --max-time — весь запрос. Не публикуй вывод с Authorization/Cookie.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "openssl s_client -connect example.com:443 -servername example.com </dev/null",
+        "desc": "Проверить TLS handshake и цепочку",
+        "hint": "Внизу ищи Verify return code",
+        "tip": "Открывает TLS-соединение и показывает цепочку сертификатов. -servername обязателен для SNI-хостинга; перенаправление из /dev/null завершает команду после handshake.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "openssl x509 -in cert.pem -noout -subject -issuer -dates -ext subjectAltName",
+        "desc": "Проверить локальный TLS-сертификат",
+        "hint": "Не выводит и не изменяет приватный ключ",
+        "tip": "Показывает subject, issuer, SAN и сроки сертификата без приватного ключа. -checkend 604800 отдельно проверит, истекает ли сертификат в течение семи дней.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "dig +trace example.com",
+        "desc": "Проследить DNS-делегирование",
+        "hint": "Для корпоративного DNS сравни с обычным dig",
+        "tip": "Идёт от корневых DNS-серверов к авторитетным и показывает делегирование зоны. Не отражает локальный split-DNS и может блокироваться firewall.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "mtr -rwzc 20 хост",
+        "desc": "Измерить потери и задержки по маршруту",
+        "hint": "Оценивай прежде всего конечный узел",
+        "tip": "mtr объединяет ping и traceroute. Report из 20 циклов полезнее одного запуска; loss на промежуточном hop не всегда означает потерю до конечного узла.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo tcpdump -nn -i any 'host IP and tcp port 443'",
+        "desc": "Проверить прохождение HTTPS-пакетов",
+        "hint": "Ctrl+C; минимизируй фильтр и срок захвата",
+        "tip": "Захватывает только трафик к указанному IP и TCP-порту 443 на всех интерфейсах. -nn отключает DNS/service lookup. Пакеты могут содержать чувствительные метаданные.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "process-performance",
+    "title": "🧠 Процессы и глубокая диагностика производительности",
+    "tags": [
+      "performance",
+      "debug",
+      "strace",
+      "perf",
+      "ps",
+      "memory",
+      "process",
+      "cgroup",
+      "pressure"
+    ],
+    "rows": [
+      {
+        "cmd": "ps -eo pid,ppid,user,%cpu,%mem,etime,cmd --sort=-%cpu | head -20",
+        "desc": "Топ процессов по CPU",
+        "hint": "Для памяти замени сортировку на --sort=-%mem",
+        "tip": "Сортирует процессы по CPU и показывает PID, PPID, пользователя, CPU, RAM, время и команду. Это моментальный снимок; подтверждай проблему наблюдением во времени.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "pstree -ap",
+        "desc": "Увидеть родительские связи процессов",
+        "hint": "Полезно перед отправкой сигнала группе процессов",
+        "tip": "Показывает дерево процессов с PID и аргументами. Хорошо видны worker-процессы, оболочки и неожиданные дочерние процессы.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo timeout 15 strace -f -tt -T -p PID",
+        "desc": "Кратко трассировать зависший процесс",
+        "hint": "На production используй короткое окно и фильтры",
+        "tip": "Подключается к процессу и показывает системные вызовы с временем и длительностью. Может создавать большой вывод и замедлять горячий процесс; ограничивай -e trace=network,file или коротким timeout.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo lsof -p PID",
+        "desc": "Открытые ресурсы процесса",
+        "hint": "Большой процесс может дать много строк",
+        "tip": "Показывает открытые файлы, сокеты и библиотеки процесса. Полезно для поиска удалённого, но всё ещё открытого log-файла или неожиданного соединения.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "pmap -x PID | tail -1",
+        "desc": "Сводка памяти процесса",
+        "hint": "RSS разных процессов может делить общие страницы",
+        "tip": "Показывает карту памяти и итоговые RSS/PSS-подобные показатели процесса. Для точного PSS удобны smem или /proc/PID/smaps_rollup.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo perf stat -p PID sleep 10",
+        "desc": "Измерить CPU-счётчики процесса",
+        "hint": "Короткое измерение без изменения процесса",
+        "tip": "Собирает аппаратные счётчики процесса десять секунд: cycles, instructions, cache misses и context switches. Требует perf и разрешений kernel.perf_event_paranoid.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "grep . /proc/pressure/{cpu,memory,io}",
+        "desc": "Проверить Pressure Stall Information",
+        "hint": "some и full отражают разную степень блокировки",
+        "tip": "PSI показывает долю времени, когда задачи ждут CPU, память или I/O. avg10/60/300 помогают понять системное давление, даже если обычная загрузка выглядит неоднозначно.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "systemd-cgtop",
+        "desc": "Ресурсы по сервисам и cgroup",
+        "hint": "q = выход; данные зависят от включённого accounting",
+        "tip": "Интерактивно показывает потребление CPU, памяти и I/O по systemd cgroup. Это удобнее ps для сервисов и контейнеров, объединяющих несколько процессов.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "permissions-acl",
+    "title": "🔏 Права, ACL и эффективный доступ",
+    "tags": [
+      "permissions",
+      "acl",
+      "capabilities",
+      "sudo",
+      "ownership",
+      "security",
+      "files"
+    ],
+    "rows": [
+      {
+        "cmd": "namei -l /путь/к/файлу",
+        "desc": "Диагностировать доступ по всей цепочке пути",
+        "hint": "Безопасная проверка без изменения прав",
+        "tip": "Разбирает каждый компонент пути и показывает владельца и права каталогов. Часто причина Permission denied находится не в файле, а в отсутствии x у родительского каталога.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "stat -c '%A %a %U:%G %n' файл",
+        "desc": "Точно показать права и владельца",
+        "hint": "Числовой и символьный режим одновременно",
+        "tip": "Показывает тип, inode, права, владельца, размер и timestamps. Формат %A %a %U:%G удобен для точного сравнения нескольких узлов.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "getfacl -p /путь",
+        "desc": "Проверить расширенные ACL",
+        "hint": "Пакет acl; обрати внимание на effective права",
+        "tip": "Показывает POSIX ACL, включая mask и default ACL каталога. ACL может давать или ограничивать доступ вопреки первому впечатлению от chmod.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo setfacl -m u:пользователь:rwX /путь",
+        "desc": "Точечно выдать доступ пользователю",
+        "hint": "Откат записи: setfacl -x u:пользователь /путь",
+        "tip": "Добавляет пользователю rwX через ACL без смены владельца. Сначала сохрани getfacl, проверь mask и применяй к минимальному пути; -R требует особой осторожности.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "sudo find / -xdev -type f -perm /6000 -ls",
+        "desc": "Аудит setuid/setgid файлов",
+        "hint": "-xdev не переходит на другие mount points",
+        "tip": "Ищет setuid и setgid файлы только в текущей файловой системе. Не каждый результат опасен, но неожиданные бинарники требуют проверки пакета и происхождения.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo find /srv -xdev \\( -nouser -o -nogroup \\) -ls",
+        "desc": "Найти файлы без существующего владельца",
+        "hint": "Не меняй владельца, пока не установлено происхождение",
+        "tip": "Ищет файлы, чьи UID/GID отсутствуют в локальной базе. Такое бывает после удаления пользователя, restore или смены LDAP/NSS.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo -l",
+        "desc": "Проверить разрешённые sudo-команды",
+        "hint": "Правила читаются из sudoers и sudoers.d",
+        "tip": "Показывает, какие команды текущий пользователь может запускать через sudo, включая ограничения и RunAs. Это безопасная проверка своей sudo policy.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "umask",
+        "desc": "Показать маску прав новых файлов",
+        "hint": "Системная политика может задаваться PAM или systemd",
+        "tip": "umask показывает маску создания новых файлов. umask 027 обычно даёт файлы 640 и каталоги 750; изменение действует только в текущей shell и дочерних процессах.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "kernel-boot-rescue",
+    "title": "🧯 Ядро, boot и аварийное восстановление",
+    "tags": [
+      "kernel",
+      "boot",
+      "rescue",
+      "initramfs",
+      "modules",
+      "grub",
+      "systemd",
+      "recovery"
+    ],
+    "rows": [
+      {
+        "cmd": "journalctl -b -1 -p warning..alert",
+        "desc": "Ошибки предыдущей загрузки",
+        "hint": "journalctl --list-boots покажет доступные boot ID",
+        "tip": "-b -1 показывает предыдущую загрузку, а диапазон warning..alert — предупреждения и ошибки. Если журнал непостоянный, предыдущего boot может не быть.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "systemctl --failed",
+        "desc": "Найти упавшие службы и mount units",
+        "hint": "Дальше: systemctl status и journalctl -u",
+        "tip": "Показывает systemd units в состоянии failed. После исправления причины используй systemctl reset-failed только для сброса сохранённого статуса.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "lsmod | sort",
+        "desc": "Список модулей текущего ядра",
+        "hint": "Удаление модуля может отключить устройство",
+        "tip": "Показывает загруженные модули ядра и зависимости. Сопоставь модуль с устройством через lspci -k или modinfo.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "modinfo модуль",
+        "desc": "Информация о модуле ядра",
+        "hint": "Безопасная проверка перед modprobe",
+        "tip": "Показывает путь, параметры, лицензию и зависимости модуля без его загрузки. modinfo -p модуль выводит только доступные параметры.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo modprobe -n -v модуль",
+        "desc": "Предпросмотр загрузки модуля",
+        "hint": "Не изменяет состояние ядра",
+        "tip": "-n выполняет dry-run, -v показывает, какие команды и зависимости выполнил бы modprobe. Убери -n только после проверки модуля и влияния на устройство.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "cat /proc/cmdline",
+        "desc": "Параметры текущей загрузки ядра",
+        "hint": "Их источник обычно /etc/default/grub",
+        "tip": "Показывает параметры, с которыми загружено текущее ядро. Полезно для диагностики console, root, quiet, iommu, cgroup и security options.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "sudo update-initramfs -u -k all",
+        "desc": "Пересобрать initramfs",
+        "hint": "Перед reboot проверь отсутствие ошибок и место в /boot",
+        "tip": "Обновляет initramfs всех установленных ядер. Выполняй после осознанного изменения модулей, crypttab или hooks; проверь свободное место в /boot и не прерывай процесс.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "dpkg -l 'linux-image*' | grep '^ii'",
+        "desc": "Проверить установленные ядра",
+        "hint": "Текущее ядро: uname -r",
+        "tip": "Показывает установленные и удалённые пакеты образов ядра. Не удаляй текущее uname -r и оставляй рабочее предыдущее ядро для rollback.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "terraform-ansible",
+    "title": "🏗️ Terraform и Ansible: безопасная автоматизация",
+    "tags": [
+      "terraform",
+      "ansible",
+      "iac",
+      "automation",
+      "plan",
+      "state",
+      "inventory",
+      "lint"
+    ],
+    "rows": [
+      {
+        "cmd": "terraform fmt -check -recursive",
+        "desc": "Проверить формат Terraform",
+        "hint": "Без изменения файлов",
+        "tip": "Проверяет формат всех Terraform-файлов и возвращает ненулевой код при отличиях, не изменяя их. Удобно для CI; локально terraform fmt -recursive исправляет формат.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "terraform validate",
+        "desc": "Проверить Terraform-конфигурацию",
+        "hint": "Сначала terraform init -backend=false при статической проверке",
+        "tip": "Проверяет синтаксис и внутреннюю согласованность конфигурации после terraform init. Не обращается к реальным ресурсам и не заменяет plan.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "terraform plan -out=tfplan",
+        "desc": "Создать сохраняемый Terraform plan",
+        "hint": "Не публикуй tfplan: он может содержать секреты",
+        "tip": "Сохраняет точный бинарный plan. Просмотри его через terraform show tfplan и применяй именно этот файл, чтобы не пересчитывать изменения между review и apply.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "terraform show tfplan",
+        "desc": "Просмотреть сохранённый plan",
+        "hint": "Проверь replace, destroy и неизвестные значения",
+        "tip": "Читабельно показывает сохранённый plan. terraform show -json tfplan подходит для автоматического анализа, но JSON также может содержать sensitive values.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "terraform apply tfplan",
+        "desc": "Применить проверенный Terraform plan",
+        "hint": "Перед запуском перепроверь workspace и аккаунт",
+        "tip": "Применяет уже проверенный plan без нового расчёта. Убедись, что окружение и credentials не изменились, а plan создан для правильного workspace.",
+        "risk": "caution"
+      },
+      {
+        "cmd": "terraform state list",
+        "desc": "Просмотреть ресурсы Terraform state",
+        "hint": "Не редактируй state вручную",
+        "tip": "Показывает адреса ресурсов в state без обращения к провайдеру. terraform state show адрес раскрывает атрибуты и может вывести sensitive данные.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "ansible-playbook playbook.yml --syntax-check",
+        "desc": "Проверить синтаксис Ansible playbook",
+        "hint": "Следом: --check --diff на ограниченной группе",
+        "tip": "Проверяет синтаксис playbook без выполнения задач. Не гарантирует доступность переменных во время run и не заменяет --check на стенде.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "ansible-inventory -i inventory --graph",
+        "desc": "Проверить структуру inventory",
+        "hint": "--host имя покажет переменные конкретного хоста",
+        "tip": "Показывает группы и хосты из итогового inventory, включая динамические источники. Полезно перед --limit, чтобы не выбрать лишние серверы.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "ansible-playbook playbook.yml --list-tasks --list-tags",
+        "desc": "Предпросмотр задач и тегов Ansible",
+        "hint": "Не подключается к хостам и не меняет их",
+        "tip": "Печатает задачи и теги без выполнения. Позволяет проверить, что --tags или --skip-tags захватят ожидаемый набор.",
+        "risk": "safe"
+      }
+    ]
+  },
+  {
+    "id": "kubernetes-contexts-rbac",
+    "title": "🧭 Kubernetes: контексты, RBAC и troubleshooting",
+    "tags": [
+      "kubernetes",
+      "kubectl",
+      "cluster",
+      "troubleshooting",
+      "context",
+      "rbac",
+      "rollout",
+      "debug"
+    ],
+    "rows": [
+      {
+        "cmd": "kubectl config get-contexts",
+        "desc": "Проверить Kubernetes-контекст",
+        "hint": "Текущий context отмечен звёздочкой",
+        "tip": "Показывает все contexts и отмечает текущий. Всегда проверяй cluster/user/namespace перед apply, delete или rollout.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "kubectl config current-context",
+        "desc": "Текущий кластер kubectl",
+        "hint": "Безопасная проверка перед изменениями",
+        "tip": "Показывает имя активного context одной строкой. Удобно добавлять в preflight deploy-скрипта вместе с явной проверкой namespace.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "kubectl auth can-i create deployments -n namespace",
+        "desc": "Проверить RBAC-разрешение",
+        "hint": "Можно добавить --as для разрешённого impersonation",
+        "tip": "Проверяет через Kubernetes RBAC, разрешено ли текущей identity выполнять действие. --list покажет все разрешения namespace, но вывод может быть большим.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "kubectl diff -f manifests/",
+        "desc": "Предпросмотр изменений Kubernetes",
+        "hint": "Проверяй удаление полей и immutable attributes",
+        "tip": "Сравнивает live-объекты с YAML через server-side dry-run и показывает diff без применения. Возврат 1 обычно означает наличие различий.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "kubectl wait --for=condition=Available deployment/имя -n namespace --timeout=120s",
+        "desc": "Дождаться готовности deployment",
+        "hint": "При timeout смотри describe, events и logs",
+        "tip": "Ждёт Available у deployment максимум две минуты и возвращает код ошибки при timeout. Полезно для CI после apply или rollout.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "kubectl top pods -A --sort-by=memory",
+        "desc": "Потребление ресурсов pod'ами",
+        "hint": "Требуется Metrics Server",
+        "tip": "Показывает CPU/RAM pod'ов при установленном Metrics Server. Высокое значение сравнивай с requests/limits и throttling, а не оценивай изолированно.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "kubectl api-resources",
+        "desc": "Справочник ресурсов API кластера",
+        "hint": "kubectl explain ресурс.spec — схема полей",
+        "tip": "Показывает доступные типы ресурсов, short names, API groups и namespaced scope. Это быстрый способ найти точное имя ресурса для get/explain.",
+        "risk": "safe"
+      },
+      {
+        "cmd": "kubectl debug -it pod/имя -n namespace --image=debian:stable-slim --target=контейнер",
+        "desc": "Диагностический контейнер рядом с приложением",
+        "hint": "Используй минимально и не меняй данные приложения",
+        "tip": "Создаёт ephemeral debug container в существующем pod. Не каждый кластер/политика разрешает эту функцию; образ должен быть доверенным и подходить архитектуре.",
+        "risk": "caution"
+      }
+    ]
+  }
+]

@@ -1,0 +1,5 @@
+⚠️ Наличие <b>sudo</b> зависит от способа установки Debian: при отключённом root-пароле
+            первый пользователь обычно получает sudo, иначе используйте <code>su -</code> или установите sudo:
+            <code>apt update &amp;&amp; apt install sudo &amp;&amp; usermod -aG sudo ИМЯ_ПОЛЬЗОВАТЕЛЯ</code> (затем перелогин).
+            Если sudo уже настроен, <code>sudo -i</code> открывает полноценную login-shell root с домашним каталогом
+            <code>/root</code>; для разовой операции безопаснее и прозрачнее использовать <code>sudo команда</code>.

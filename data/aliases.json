@@ -1,0 +1,18 @@
+{
+  "пакеты": "apt dpkg deb debian repository repos sources обновление upgrade install",
+  "логи": "journalctl journald syslog system log error",
+  "сеть": "network dns route port socket firewall nftables ip",
+  "безопасность": "security ssh apparmor audit firewall sudo",
+  "диск": "storage filesystem lvm smart mount swap io",
+  "бэкап": "backup restore restic borg snapshot rsync резервная копия",
+  "база": "database postgresql postgres mysql mariadb redis sql",
+  "контейнер": "container docker compose podman image",
+  "память": "ram memory oom swap process",
+  "загрузка": "boot systemd kernel startup initramfs grub",
+  "сертификат": "certificate tls ssl https openssl x509 chain",
+  "права": "permissions acl ownership chmod sudo rbac access",
+  "ядро": "kernel boot initramfs module modprobe grub dmesg",
+  "автоматизация": "automation terraform ansible iac playbook inventory",
+  "кластер": "cluster kubernetes kubectl k8s context namespace rbac",
+  "производительность": "performance cpu memory io pressure strace perf latency"
+}
