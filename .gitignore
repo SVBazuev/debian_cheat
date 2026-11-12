@@ -10,3 +10,10 @@ Thumbs.db
 
 # Project specific
 todo.md
+
+# Dev tools
+.dev_tools/
+
+# Build artifacts
+dist/
+build/
