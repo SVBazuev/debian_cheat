@@ -1,0 +1,22 @@
+{
+  "name": "service-desk-simulator",
+  "version": "1.0.0",
+  "description": "Service Desk Simulator",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "node bin/ludus.js build",
+    "pretest": "npm run build",
+    "test": "node tests/smoke-test-dom.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@ludus/core": "*"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0"
+  }
+}
