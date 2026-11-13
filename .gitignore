@@ -11,6 +11,9 @@ Thumbs.db
 # Project specific
 todo.md
 
+# Зависимости
+node_modules/
+
 # Dev tools
 .dev_tools/
 
