@@ -1,0 +1,12 @@
+<div class="toolbar" role="search">
+    <label class="sr-only" for="search-input">Поиск по базе знаний</label>
+    <input type="search" id="search-input" data-slot="search" placeholder="Поиск: команда, тег, ошибка…" autocomplete="off" aria-describedby="search-status">
+    <button type="button" id="clear-search" data-slot="clear" hidden>Очистить</button>
+    <select id="risk-filter" data-slot="risk" aria-label="Фильтр по уровню риска">
+        <option value="all">Все уровни риска</option>
+        <option value="safe">Безопасные проверки</option>
+        <option value="caution">Осторожно</option>
+        <option value="danger">Опасные действия</option>
+    </select>
+    <span id="search-status" data-slot="status" role="status" aria-live="polite"></span>
+</div>
