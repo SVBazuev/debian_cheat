@@ -1,0 +1,23 @@
+{
+    "name": "default",
+    "tokens": {
+        "--page": "#101419",
+        "--page-glow": "#151b22",
+        "--surface": "#171d24",
+        "--surface-raised": "#1c232c",
+        "--surface-soft": "#202832",
+        "--command-bg": "#0c1116",
+        "--command-hover": "#111922",
+        "--border": "#2b3541",
+        "--border-soft": "#232c36",
+        "--text": "#d8dee7",
+        "--muted": "#8e9aa8",
+        "--heading": "#b9c9d8",
+        "--accent": "#89aabd",
+        "--accent-soft": "#283b47",
+        "--code": "#d8cba8",
+        "--good": "#8fb59a",
+        "--warn": "#c4aa75",
+        "--bad": "#c58c8c"
+    }
+}
