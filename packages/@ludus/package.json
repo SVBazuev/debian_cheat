@@ -1,0 +1,10 @@
+{
+    "name": "@ludus/core",
+    "version": "0.1.0",
+    "description": "Schema-driven form/workflow runtime",
+    "type": "module",
+    "license": "MIT",
+    "exports": {
+        "./js/*": "./js/*"
+    }
+}
